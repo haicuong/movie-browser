@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-gray-200 text-black flex relative dark:text-white flex-col min-h-dvh dark:bg-[#232323] border-black dark:border-white;
+  }
+  #root {
+    @apply min-h-dvh flex flex-col;
+  }
+}
