@@ -4,6 +4,7 @@ import type { Movie } from "./types/movie";
 import srekCover from "./assets/movie-covers/shrek.webp";
 import nineCover from "./assets/movie-covers/9.webp";
 import lionKingCover from "./assets/movie-covers/the-lion-king.webp";
+import { useState } from "react";
 
 const movies: Movie[] = [
   {
@@ -30,12 +31,18 @@ const movies: Movie[] = [
 ];
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const displayedMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <>
-      <Header />
+      <Header onSearch={setSearchQuery} />
       <main className="flex flex-col bg-white dark:bg-[#121212] px-4 md:px-10 justify-center flex-1">
         <div className="flex justify-evenly flex-wrap gap-4 p-4">
-          {movies.map((movie) => (
+          {displayedMovies.map((movie) => (
             <MovieCard
               key={movie.id}
               title={movie.title}

@@ -1,13 +1,15 @@
-export default function SearchBar() {
+export default function SearchBar({
+  onSearch,
+}: {
+  onSearch: (query: string) => void;
+}) {
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        alert("Searching!");
-      }}
+      onSubmit={(e) => e.preventDefault()}
       className="flex items-center justify-center gap-2"
     >
       <input
+        onChange={(e) => onSearch(e.target.value)}
         type="text"
         placeholder="Search movies..."
         className="border w-40 md:w-xs border-gray-300 dark:border-[#444444] rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
