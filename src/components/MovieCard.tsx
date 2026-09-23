@@ -2,13 +2,18 @@ export default function MovieCard({
   title,
   description,
   imgUrl,
+  onClick,
 }: {
   title: string;
   description: string;
   imgUrl: string;
+  onClick: () => void;
 }) {
   return (
-    <article className="bg-gray-300 w-fit min-w-64 md:max-w-[25vw] dark:bg-[#343434] rounded-md p-4 shadow-gray-400 dark:shadow-gray-600 shadow-md hover:shadow-lg transition-shadow duration-300">
+    <button
+      onClick={onClick}
+      className="bg-gray-300 text-start w-fit min-w-64 md:max-w-[25vw] dark:bg-[#343434] rounded-md p-4 shadow-gray-400 dark:shadow-gray-600 shadow-md hover:shadow-lg transition-shadow duration-300"
+    >
       <img
         src={imgUrl}
         alt={title}
@@ -18,6 +23,6 @@ export default function MovieCard({
       <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
         {description}
       </p>
-    </article>
+    </button>
   );
 }
