@@ -1,18 +1,26 @@
 import { useEffect, useRef } from "react";
-import type { Movie } from "../types/movie";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router";
+import { movies } from "../main.tsx";
 
-export default function MovieModal({
-  movie,
-  onClose,
-}: {
-  movie: Movie;
-  onClose: () => void;
-}) {
+export default function MovieModal() {
+  const navigate = useNavigate();
+  const movieId = useParams<{ id: string }>();
+
+  const movie = movies.find((m) => m.id === Number(movieId.id));
   const modalRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    modalRef.current?.focus();
-  }, []);
+    if (!movie) {
+      navigate("/", { replace: true });
+    } else modalRef.current?.focus();
+  }, [movie, navigate]);
+
+  if (!movie) return null;
+
+  function onClose() {
+    navigate("/", { replace: true });
+  }
 
   return (
     <div
@@ -55,9 +63,7 @@ export default function MovieModal({
         <p className="text-gray-600 dark:text-gray-300">
           Tags: {movie.tags.join(", ")}
         </p>
-        <p className="text-gray-600 dark:text-gray-300">
-          Description: {movie.description}
-        </p>
+        <p className="text-gray-600 dark:text-gray-300">{movie.description}</p>
       </article>
     </div>
   );
