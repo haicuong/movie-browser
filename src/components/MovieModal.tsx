@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import { movies } from "../main.tsx";
+import { MovieFavorite } from "./MovieFavorite.tsx";
 
 export default function MovieModal() {
   const navigate = useNavigate();
@@ -11,9 +12,14 @@ export default function MovieModal() {
   const modalRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (!movie) {
-      navigate("/", { replace: true });
-    } else modalRef.current?.focus();
+    if (movie) {
+      document.body.style.overflow = "hidden";
+      modalRef.current?.focus();
+    } else navigate("/", { replace: true });
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [movie, navigate]);
 
   if (!movie) return null;
@@ -34,11 +40,22 @@ export default function MovieModal() {
         ref={modalRef}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
-        className="bg-gray-300 flex flex-col gap-2 w-[80vw] h-[90%] overflow-y-auto dark:bg-[#343434] rounded-md p-4"
+        className="bg-gray-300 flex flex-col gap-2 w-[90vw] md:w-[80vw] h-[90%] overflow-y-auto dark:bg-[#343434] rounded-md p-4"
       >
-        <h3 id="modal-title" className="text-lg font-bold">
-          {movie.title}
-        </h3>
+        <header className="flex relative justify-between items-center mb-2">
+          <div className="flex gap-2 items-center">
+            <h3 id="modal-title" className="text-lg font-bold">
+              {movie.title}
+            </h3>
+            <MovieFavorite movieId={movie.id} options={{ size: 6 }} />
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-600 sticky top-0 right-0 hover:cursor-pointer hover:font-bold md:text-2xl text-4xl dark:text-gray-300"
+          >
+            &#x2715;
+          </button>
+        </header>
         <p className="text-gray-600 dark:text-gray-300">
           Rating: {movie.rating}
         </p>
