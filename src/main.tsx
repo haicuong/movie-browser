@@ -5,13 +5,12 @@ import App from "./App.tsx";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import MovieModal from "./components/MovieModal.tsx";
-import type { Movie } from "./types/movie.ts";
+// import srekCover from "./assets/movie-covers/shrek.webp";
+// import nineCover from "./assets/movie-covers/9.webp";
+// import lionKingCover from "./assets/movie-covers/the-lion-king.webp";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import srekCover from "./assets/movie-covers/shrek.webp";
-import nineCover from "./assets/movie-covers/9.webp";
-import lionKingCover from "./assets/movie-covers/the-lion-king.webp";
-
-export const movies: Movie[] = [
+/* export const movies: Movie[] = [
   {
     id: 1,
     title: "Shrek",
@@ -39,7 +38,17 @@ export const movies: Movie[] = [
     imgUrl: lionKingCover,
     tags: ["Animation", "Adventure", "Drama"],
   },
-];
+]; */
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5,
+      retry: 1,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -56,6 +65,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </StrictMode>,
 );
