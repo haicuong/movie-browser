@@ -21,7 +21,31 @@ export interface MovieDetails {
   videos: {
     results: MovieVideo[];
   };
+  runtime: number | null;
+  tagline: string;
+  original_title: string | null;
+  original_language: string;
+  credits: {
+    cast: MovieCast[];
+    crew: MovieCrew[];
+  };
 }
+
+type MovieCast = {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  order: number;
+};
+
+type MovieCrew = {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+};
 
 type MovieVideo = {
   id: string;
@@ -79,7 +103,7 @@ const fetchMovieList = async (
 
 const fetchMovieById = async (id: number): Promise<MovieDetails> => {
   const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}?language=en-US&append_to_response=videos`,
+    `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}?language=en-US&append_to_response=videos,credits`,
     fetchInit,
   );
 

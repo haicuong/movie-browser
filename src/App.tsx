@@ -30,7 +30,12 @@ export default function App() {
 
   return (
     <>
-      <Header>
+      <Header
+        onHome={() => {
+          setSearchState("");
+          setSearchParams({}, { replace: true });
+        }}
+      >
         <SearchBar
           searchQuery={searchState}
           onSearch={(query) => setSearchState(query)}
