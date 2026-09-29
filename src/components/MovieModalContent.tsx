@@ -118,7 +118,7 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
                 key={`${actor.id}-${actor.character}`}
                 href={`https://www.themoviedb.org/person/${actor.id}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="w-36 shrink-0 rounded p-2 transition-colors hover:bg-gray-400/50 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:hover:bg-[#232323]"
                 aria-label={`View ${actor.name}'s profile on TMDB`}
               >
@@ -155,7 +155,7 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
                   <a
                     href={`https://www.themoviedb.org/person/${member.id}`}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="underline-offset-2 text-blue-500 hover:underline focus:outline-none focus:ring-2 focus:ring-amber-500"
                   >
                     {member.name}
@@ -173,7 +173,7 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
                   <a
                     href={`https://www.themoviedb.org/person/${member.id}`}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="underline-offset-2 text-blue-500 hover:underline focus:outline-none focus:ring-2 focus:ring-amber-500"
                   >
                     {member.name}

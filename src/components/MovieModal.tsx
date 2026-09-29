@@ -74,7 +74,7 @@ export default function MovieModal() {
           ref={modalRef}
           tabIndex={-1}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gray-300 flex h-full min-h-full flex-col overflow-y-auto gap-2 dark:bg-[#343434] rounded-md p-4"
+          className="bg-gray-100 flex h-full min-h-full flex-col overflow-y-auto gap-2 dark:bg-[#343434] rounded-md p-4"
         >
           {error || !isValidMovieId ? (
             <MovieModalError

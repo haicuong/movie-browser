@@ -98,6 +98,8 @@ export default function App() {
         <a
           href="https://www.flaticon.com/free-icons/business-and-finance"
           title="business and finance icons"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Business and finance icons created by monkik - Flaticon
         </a>
@@ -156,7 +158,7 @@ function HorizontalMovies({
   return (
     <section className="flex w-full min-w-0 flex-col gap-4">
       <h2 className="text-xl font-bold">{title}</h2>
-      <div className="flex min-w-0 w-full flex-nowrap gap-4 overflow-x-auto overflow-y-hidden pb-2 pt-3">
+      <div className="flex min-w-0 w-full flex-nowrap gap-4 overflow-x-auto overflow-y-hidden py-4 pt-3">
         {isPending ? (
           Array.from({ length: 5 }, (_, index) => (
             <MovieCardSkeleton key={index} variant="carousel" />

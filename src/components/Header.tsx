@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function Header({
   children,
@@ -19,7 +20,10 @@ export default function Header({
           Movie Browser
         </Link>
       </div>
-      {children}
+      <div className="flex items-center justify-center gap-4">
+        <ThemeToggle />
+        {children}
+      </div>
     </header>
   );
 }

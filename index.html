@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      (function () {
+        const stored = localStorage.getItem("theme-storage")?.state?.theme;
+        const isDark =
+          stored === "dark" ||
+          (stored !== "light" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        console.log("Load isDark: ", isDark);
+        document.documentElement.classList.toggle("dark", isDark);
+      })();
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/webp" href="/logo.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
