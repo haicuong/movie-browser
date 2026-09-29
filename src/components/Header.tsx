@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
+import { Button } from "@/components/ui/button";
 
 export default function Header({
   children,
@@ -20,6 +21,7 @@ export default function Header({
           Movie Browser
         </Link>
       </div>
+      <Button>Click me!</Button>
       <div className="flex items-center justify-center gap-4">
         <ThemeToggle />
         {children}
