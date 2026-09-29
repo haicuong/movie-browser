@@ -1,30 +1,38 @@
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
-import { MovieFavorite } from "./MovieFavorite.tsx";
-import { posterBaseUrl, useMovieId } from "../types/movie.ts";
+import { MovieModalContent } from "./MovieModalContent.tsx";
+import { MovieModalError } from "./MovieModalError.tsx";
+import { useMovieId } from "../types/tmdb.ts";
+import { TooManyRequestsError } from "../types/custom-errors.ts";
+import { useCountDown } from "../types/utilities.ts";
 
 export default function MovieModal() {
   const navigate = useNavigate();
   const movieId = useParams<{ id: string }>();
 
-  const { data: movie } = useMovieId(Number(movieId?.id));
+  const rawMovieId = movieId.id;
+  const parsedMovieId = rawMovieId ? Number(rawMovieId) : NaN;
+
+  const isValidMovieId = Number.isInteger(parsedMovieId) && parsedMovieId > 0;
+
+  const { data: movie, error, refetch } = useMovieId(parsedMovieId);
   const modalRef = useRef<HTMLElement>(null);
 
-  const trailer =
-    movie?.videos?.results.find(
-      (video) =>
-        video.site === "YouTube" && video.type === "Trailer" && video.official,
-    ) ??
-    movie?.videos?.results.find(
-      (video) => video.site === "YouTube" && video.type === "Trailer",
-    );
+  const [countDown, resetCountDown] = useCountDown(5);
 
   function onClose() {
     navigate("/", { replace: true });
   }
 
   useEffect(() => {
+    if (error instanceof TooManyRequestsError) {
+      resetCountDown();
+    }
+  }, [error, resetCountDown]);
+
+  useEffect(() => {
+    // Handle safari scroll lock
     const scrollY = window.scrollY;
     const body = document.body;
 
@@ -67,49 +75,27 @@ export default function MovieModal() {
           onClick={(e) => e.stopPropagation()}
           className="bg-gray-300 flex h-full min-h-full flex-col overflow-y-auto gap-2 dark:bg-[#343434] rounded-md p-4"
         >
-          {movie && (
-            <>
-              <header className="flex relative justify-between items-center mb-2">
-                <div className="flex gap-2 items-center">
-                  <h3 id="modal-title" className="text-lg font-bold">
-                    {movie.title}
-                  </h3>
-                  <MovieFavorite movieId={movie.id} options={{ size: 6 }} />
-                </div>
-              </header>
-              <p className="text-gray-600 dark:text-gray-300">
-                Rating: {movie.vote_average}
-              </p>
-              <div className="flex flex-col md:flex-row gap-4">
-                <img
-                  src={`${posterBaseUrl}${movie.poster_path}`}
-                  alt={movie.title}
-                  className="w-full md:w-fit object-contain md:h-64"
-                />
-                {trailer && (
-                  <div className="relative aspect-video w-full overflow-hidden bg-black md:w-96">
-                    <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${trailer.key}?rel=0&playsinline=1`}
-                      title={`${movie.title} trailer`}
-                      className="absolute inset-0 h-full w-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullScreen
-                    />
-                  </div>
-                )}
-              </div>
-              <p className="text-gray-600 dark:text-gray-300">
-                Tags: {movie.genres.map((genre) => genre.name).join(", ")}
-              </p>
-              <p className="text-gray-600 dark:text-gray-300">
-                {movie.overview}
-              </p>
-            </>
+          {error || !isValidMovieId ? (
+            <MovieModalError
+              error={error}
+              isValidMovieId={isValidMovieId}
+              countDown={countDown}
+              onRetry={() => {
+                resetCountDown();
+                refetch();
+              }}
+            />
+          ) : movie ? (
+            <MovieModalContent movie={movie} />
+          ) : (
+            <p className="flex h-full items-center justify-center text-gray-600 dark:text-gray-300">
+              Loading movie...
+            </p>
           )}
         </article>
         <button
           onClick={onClose}
+          aria-label="Close movie details"
           className="text-gray-600 absolute top-3 right-6 hover:cursor-pointer hover:font-bold md:text-2xl text-4xl dark:text-gray-300"
         >
           &#x2715;

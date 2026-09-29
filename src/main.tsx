@@ -9,6 +9,11 @@ import MovieModal from "./components/MovieModal.tsx";
 // import nineCover from "./assets/movie-covers/9.webp";
 // import lionKingCover from "./assets/movie-covers/the-lion-king.webp";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  MovieNotFoundError,
+  NetworkError,
+  TooManyRequestsError,
+} from "./types/custom-errors.ts";
 
 /* export const movies: Movie[] = [
   {
@@ -45,7 +50,15 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5,
-      retry: 1,
+      retry: (failureCount, error) => {
+        if (
+          error instanceof MovieNotFoundError ||
+          error instanceof TooManyRequestsError
+        ) {
+          return false;
+        }
+        return error instanceof NetworkError && failureCount < 2;
+      },
     },
   },
 });

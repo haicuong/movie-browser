@@ -3,14 +3,14 @@ import MovieCard from "./components/MovieCard";
 import { Outlet, useSearchParams } from "react-router";
 import SearchBar from "./components/SearchBar.tsx";
 import {
-  useDebounce,
   useNowPlayingMovies,
   usePopularMovies,
   useSearchMovies,
   useTrendingMovies,
   useUpcomingMovies,
   type MovieDetails,
-} from "./types/movie.ts";
+} from "./types/tmdb.ts";
+import { useDebounce } from "./types/utilities.ts";
 import { useEffect, useState } from "react";
 
 export default function App() {
@@ -18,7 +18,7 @@ export default function App() {
   const [searchState, setSearchState] = useState(
     () => searchParams.get("q") ?? "",
   );
-  const searchQuery = useDebounce(searchState, 300);
+  const searchQuery = useDebounce(searchState, 400);
 
   useEffect(() => {
     setSearchParams(searchQuery ? { q: searchQuery } : {});
@@ -31,9 +31,12 @@ export default function App() {
   return (
     <>
       <Header>
-        <SearchBar onSearch={(query) => setSearchState(query)} />
+        <SearchBar
+          searchQuery={searchState}
+          onSearch={(query) => setSearchState(query)}
+        />
       </Header>
-      <main className="flex flex-col py-4 pb-8 overflow-x-hidden bg-white dark:bg-[#121212] px-4 md:px-10 justify-center flex-1">
+      <main className="flex flex-col py-4 pb-8 overflow-x-hidden bg-white dark:bg-[#121212] px-4 md:px-6 justify-center flex-1">
         <div className="flex justify-evenly flex-wrap gap-4 p-4">
           {hasSeachQuery && isSuccess ? (
             movies.results.map((movie) => (
@@ -54,6 +57,12 @@ export default function App() {
             TMDB.
           </p>
         </div>
+        <a
+          href="https://www.flaticon.com/free-icons/business-and-finance"
+          title="business and finance icons"
+        >
+          Business and finance icons created by monkik - Flaticon
+        </a>
       </footer>
     </>
   );
@@ -95,12 +104,14 @@ function HorizontalMovies({
   movies: MovieDetails[] | undefined;
 }) {
   return (
-    <section className="flex w-full min-w-0 flex-col gap-4 p-4">
+    <section className="flex w-full min-w-0 flex-col gap-4">
       <h2 className="text-lg font-bold">{title}</h2>
 
-      <div className="flex min-w-0 flex-nowrap gap-4 overflow-x-auto overflow-y-hidden pb-2 pt-3">
+      <div className="flex min-w-0 w-full flex-nowrap gap-4 overflow-x-auto overflow-y-hidden pb-2 pt-3">
         {movies ? (
-          movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
+          movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} variant="carousel" />
+          ))
         ) : (
           <p className="text-gray-500">Loading...</p>
         )}
