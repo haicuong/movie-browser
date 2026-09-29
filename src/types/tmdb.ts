@@ -10,7 +10,7 @@ type Genre = {
   name: string;
 };
 
-export interface MovieDetails {
+export type MovieDetails = {
   id: number;
   title: string;
   release_date: string;
@@ -29,7 +29,7 @@ export interface MovieDetails {
     cast: MovieCast[];
     crew: MovieCrew[];
   };
-}
+};
 
 type MovieCast = {
   id: number;
@@ -56,12 +56,19 @@ type MovieVideo = {
   official: boolean;
 };
 
-interface MovieListResponse {
+export type MovieListItem = {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  overview: string;
+};
+
+type MovieListResponse = {
   page: number;
-  results: MovieDetails[];
+  results: MovieListItem[];
   total_pages: number;
   total_results: number;
-}
+};
 
 const fetchInit: RequestInit = {
   headers: {
@@ -79,10 +86,22 @@ const fetchMovieList = async (
     ...params,
   });
 
-  const response = await fetch(
-    `https://api.themoviedb.org/3${path}?${searchParams}`,
-    fetchInit,
-  );
+  let response;
+
+  try {
+    response = await fetch(
+      `https://api.themoviedb.org/3${path}?${searchParams}`,
+      fetchInit,
+    );
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    throw new NetworkError(
+      error instanceof Error ? error.message : "Network request failed",
+    );
+  }
 
   if (!response.ok) {
     if (response.status === 429) {
@@ -102,10 +121,22 @@ const fetchMovieList = async (
 };
 
 const fetchMovieById = async (id: number): Promise<MovieDetails> => {
-  const response = await fetch(
-    `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}?language=en-US&append_to_response=videos,credits`,
-    fetchInit,
-  );
+  let response;
+
+  try {
+    response = await fetch(
+      `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}?language=en-US&append_to_response=videos,credits`,
+      fetchInit,
+    );
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    throw new NetworkError(
+      error instanceof Error ? error.message : "Network request failed",
+    );
+  }
 
   if (!response.ok) {
     if (response.status === 404) {
@@ -129,11 +160,23 @@ const fetchMovieById = async (id: number): Promise<MovieDetails> => {
 const searchMoviesByName = async (
   query: string,
 ): Promise<MovieListResponse> => {
-  const response = await fetch(
-    "https://api.themoviedb.org/3/search/movie?query=" +
-      encodeURIComponent(query),
-    fetchInit,
-  );
+  let response;
+
+  try {
+    response = await fetch(
+      "https://api.themoviedb.org/3/search/movie?query=" +
+        encodeURIComponent(query),
+      fetchInit,
+    );
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+
+    throw new NetworkError(
+      error instanceof Error ? error.message : "Network request failed",
+    );
+  }
 
   if (!response.ok) {
     if (response.status === 429) {

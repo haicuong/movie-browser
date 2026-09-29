@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 export function useDebounce<T>(value: T, delay: number) {
   const [stateValue, setStateValue] = useState(value);
 
+  function immediateUpdate(newValue: T) {
+    setStateValue(newValue);
+  }
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setStateValue(value);
@@ -13,7 +17,7 @@ export function useDebounce<T>(value: T, delay: number) {
     };
   }, [value, delay]);
 
-  return stateValue;
+  return [stateValue, immediateUpdate] as const;
 }
 
 export function useCountDown(initialValue: number) {
@@ -25,7 +29,7 @@ export function useCountDown(initialValue: number) {
     }, 1000);
 
     return () => {
-      clearTimeout(timer);
+      clearInterval(timer);
     };
   }, []);
 

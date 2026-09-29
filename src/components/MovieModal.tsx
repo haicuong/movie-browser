@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import { MovieModalContent } from "./MovieModalContent.tsx";
 import { MovieModalError } from "./MovieModalError.tsx";
+import { MovieModalSkeleton } from "./MovieModalSkeleton.tsx";
 import { useMovieId } from "../types/tmdb.ts";
 import { TooManyRequestsError } from "../types/custom-errors.ts";
 import { useCountDown } from "../types/utilities.ts";
@@ -88,9 +89,7 @@ export default function MovieModal() {
           ) : movie ? (
             <MovieModalContent movie={movie} />
           ) : (
-            <p className="flex h-full items-center justify-center text-gray-600 dark:text-gray-300">
-              Loading movie...
-            </p>
+            <MovieModalSkeleton />
           )}
         </article>
         <button

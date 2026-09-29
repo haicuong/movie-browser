@@ -1,12 +1,12 @@
 import { Link } from "react-router";
-import { posterBaseUrl, type MovieDetails } from "../types/tmdb.ts";
+import { posterBaseUrl, type MovieListItem } from "../types/tmdb.ts";
 import { MovieFavorite } from "./MovieFavorite";
 
 export default function MovieCard({
   movie,
   variant = "grid",
 }: {
-  movie: MovieDetails;
+  movie: MovieListItem;
   variant?: "grid" | "carousel";
 }) {
   const layoutClass =

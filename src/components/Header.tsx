@@ -13,7 +13,6 @@ export default function Header({
         <img src="/logo.webp" alt="Logo" className="w-10 hidden md:block" />
         <Link
           to={{ pathname: "/", search: "", hash: "" }}
-          replace
           onClick={onHome}
           className="text-xl font-bold md:p-4 py-4 hover:underline"
         >
