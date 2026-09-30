@@ -1,5 +1,11 @@
 import { useThemeStore } from "../types/utilities.ts";
 import { Sun, Moon } from "lucide-react";
+import { Button } from "@/components/ui/button.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 export function ThemeToggle() {
   const theme = useThemeStore((state) => state.theme);
@@ -8,13 +14,26 @@ export function ThemeToggle() {
   const nextTheme = theme === "light" ? "dark" : "light";
 
   return (
-    <button
-      onClick={toggleTheme}
-      aria-label={`Toggle to ${nextTheme} theme`}
-      title={`Toggle to ${nextTheme} theme`}
-      className="bg-gray-300 flex p-2 md:p-0 aspect-square items-center justify-center transition-transform hover:cursor-pointer dark:bg-[#343434] rounded-2xl size-12 justify-self-end active:scale-94 md:hover:scale-96 md:active:scale-92"
-    >
-      {theme === "light" ? <Moon size={40} /> : <Sun size={40} />}
-    </button>
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            onClick={toggleTheme}
+            variant="ghost"
+            aria-label={`Toggle to ${nextTheme} theme`}
+            className="bg-gray-300 hover:bg-gray-300 aspect-square transition-none hover:cursor-pointer dark:bg-[#343434] dark:hover:bg-[#343434] rounded-2xl size-12"
+          >
+            {theme === "light" ? (
+              <Moon className="size-7" />
+            ) : (
+              <Sun className="size-7" />
+            )}
+          </Button>
+        }
+      />
+      <TooltipContent>
+        <p>Toggle to {nextTheme} theme</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }

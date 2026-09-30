@@ -13,6 +13,7 @@ import {
 } from "./types/tmdb.ts";
 import { useDebounce } from "./types/utilities.ts";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button.tsx";
 // import { toast } from "@/components/ui/toast.tsx";
 
 export default function App() {
@@ -64,12 +65,13 @@ export default function App() {
                   <span className="font-bold text-xl">
                     No results found for "{searchQuery}".
                   </span>
-                  <button
+                  <Button
                     onClick={onHome}
-                    className="w-fit rounded-xl bg-gray-400 p-4 transition-colors duration-300 hover:cursor-pointer hover:bg-gray-500 dark:bg-[#232323] dark:hover:bg-[#1a1a1a]"
+                    variant="secondary"
+                    className="px-4 py-6"
                   >
                     Go back to the home page
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 movies.results.map((movie) => (

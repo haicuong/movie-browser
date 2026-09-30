@@ -4,6 +4,7 @@ import {
   NetworkError,
   TooManyRequestsError,
 } from "../types/custom-errors.ts";
+import { Button } from "@/components/ui/button.tsx";
 
 type MovieModalErrorProps = {
   error: Error | null;
@@ -42,13 +43,14 @@ export function MovieModalError({
         <span className="text-gray-600 dark:text-gray-300">
           Request limit exceeded. Please wait a few seconds and try again.
         </span>
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={countDown > 0 ? undefined : onRetry}
-          className={actionClassName}
+          className="mt-4 p-4 py-6 hover:cursor-pointer"
         >
           {countDown > 0 ? `Try again in ${countDown} seconds...` : "Try again"}
-        </button>
+        </Button>
       </div>
     );
   }
@@ -63,9 +65,14 @@ export function MovieModalError({
         <span className="text-gray-600 italic dark:text-gray-300">
           {error.message}
         </span>
-        <button type="button" onClick={onRetry} className={actionClassName}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={onRetry}
+          className="mt-4 p-4 py-6 hover:cursor-pointer"
+        >
           Try again
-        </button>
+        </Button>
       </div>
     );
   }

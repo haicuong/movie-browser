@@ -11,7 +11,6 @@ import {
   NetworkError,
   TooManyRequestsError,
 } from "./types/custom-errors.ts";
-import { Toaster } from "@/components/ui/toast.tsx";
 import { TooltipProvider } from "@/components/ui/tooltip.tsx";
 
 const queryClient = new QueryClient({
@@ -52,6 +51,5 @@ createRoot(document.getElementById("root")!).render(
         <RouterProvider router={router} />
       </QueryClientProvider>
     </TooltipProvider>
-    <Toaster />
   </StrictMode>,
 );

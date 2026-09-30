@@ -34,14 +34,14 @@ export default function MovieCard({
             </div>
           )}
         </div>
-        <h3 className="text-lg font-bold">{movie.title}</h3>
+        <h3 className="text-lg font-bold line-clamp-1">{movie.title}</h3>
       </Link>
       <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
         {movie.overview}
       </p>
-      <span className="absolute -top-2 right-4 bg-amber-50 dark:bg-[#232323] rounded-lg p-1 shadow-gray-400 dark:shadow-gray-600 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="absolute -top-2 right-4 bg-amber-50 dark:bg-[#232323] rounded-lg p-1 shadow-gray-400 dark:shadow-gray-600 shadow-md hover:shadow-lg transition-shadow duration-300">
         <MovieFavorite movieId={movie.id} />
-      </span>
+      </div>
     </article>
   );
 }
