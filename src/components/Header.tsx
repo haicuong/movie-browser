@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
-import { Button } from "@/components/ui/button";
 
 export default function Header({
   children,
@@ -11,18 +10,17 @@ export default function Header({
 }) {
   return (
     <header className="bg-gray-200 sticky top-0 z-10 dark:bg-[#232323] items-center justify-between md:px-4 px-4 flex">
-      <div className="flex items-center justify-center">
-        <img src="/logo.webp" alt="Logo" className="w-10 hidden md:block" />
+      <div className="flex items-center gap-2 md:gap-4 justify-center">
+        <img src="/logo.webp" alt="Logo" className="w-10" />
         <Link
           to={{ pathname: "/", search: "", hash: "" }}
           onClick={onHome}
-          className="text-xl font-bold md:p-4 py-4 hover:underline"
+          className="text-md md:text-lg font-bold py-2 hover:underline"
         >
           Movie Browser
         </Link>
       </div>
-      <Button>Click me!</Button>
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center py-2 justify-center gap-4">
         <ThemeToggle />
         {children}
       </div>

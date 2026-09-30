@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { posterBaseUrl, type MovieListItem } from "../types/tmdb.ts";
+import { posterBaseUrlStandard, type MovieListItem } from "../types/tmdb.ts";
 import { MovieFavorite } from "./MovieFavorite";
 
 export default function MovieCard({
@@ -22,7 +22,9 @@ export default function MovieCard({
         <div className="mb-2 aspect-2/3 w-full overflow-hidden rounded-sm bg-gray-400 dark:bg-[#232323]">
           {movie.poster_path ? (
             <img
-              src={`${posterBaseUrl}${movie.poster_path}`}
+              loading="lazy"
+              decoding="async"
+              src={`${posterBaseUrlStandard}${movie.poster_path}`}
               alt={movie.title}
               className="h-full w-full object-cover"
             />

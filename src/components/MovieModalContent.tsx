@@ -1,5 +1,4 @@
-import { MovieFavorite } from "./MovieFavorite.tsx";
-import { posterBaseUrl, type MovieDetails } from "../types/tmdb.ts";
+import { posterBaseUrlStandard, type MovieDetails } from "../types/tmdb.ts";
 
 type MovieModalContentProps = {
   movie: MovieDetails;
@@ -20,37 +19,16 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
   const writers = movie.credits?.crew.filter(
     (member) => member.department === "Writing",
   );
-  const releaseYear = movie.release_date?.slice(0, 4);
   const runtime = movie.runtime
     ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`
     : null;
 
   return (
-    <>
-      <header className="relative mb-2 flex items-start justify-between">
-        <div className="flex items-center gap-2">
-          <div>
-            <h3 id="modal-title" className="text-lg font-bold">
-              {movie.title}
-              {releaseYear && (
-                <span className="ml-2 font-normal text-gray-600 dark:text-gray-300">
-                  ({releaseYear})
-                </span>
-              )}
-            </h3>
-            {movie.original_title && movie.original_title !== movie.title && (
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Original title: {movie.original_title}
-              </p>
-            )}
-          </div>
-          <MovieFavorite movieId={movie.id} options={{ size: 6 }} />
-        </div>
-      </header>
+    <article className="flex flex-col h-full overflow-y-auto gap-4 md:-mr-1">
       <div className="flex flex-col gap-4 md:flex-row">
         {movie.poster_path ? (
           <img
-            src={`${posterBaseUrl}${movie.poster_path}`}
+            src={`${posterBaseUrlStandard}${movie.poster_path}`}
             alt={movie.title}
             className="w-full object-contain md:h-64 md:w-fit"
           />
@@ -185,6 +163,6 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
           )}
         </section>
       )}
-    </>
+    </article>
   );
 }

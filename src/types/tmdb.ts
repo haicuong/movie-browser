@@ -70,16 +70,7 @@ type MovieListResponse = {
   total_results: number;
 };
 
-const fetchInit: RequestInit = {
-  headers: {
-    Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-  },
-};
-
-const fetchMovieList = async (
-  path: string,
-  params: Record<string, string> = {},
-): Promise<MovieListResponse> => {
+const fetchTMDB = async (path: string, params: Record<string, string> = {}) => {
   const searchParams = new URLSearchParams({
     language: "en-US",
     page: "1",
@@ -91,7 +82,11 @@ const fetchMovieList = async (
   try {
     response = await fetch(
       `https://api.themoviedb.org/3${path}?${searchParams}`,
-      fetchInit,
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
+        },
+      },
     );
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
@@ -104,42 +99,7 @@ const fetchMovieList = async (
   }
 
   if (!response.ok) {
-    if (response.status === 429) {
-      throw new TooManyRequestsError();
-    } else if (response.status >= 500) {
-      throw new NetworkError(
-        `Network error: ${response.status} ${response.statusText}`,
-      );
-    }
-
-    throw new Error(
-      `Failed to fetch movie: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  return response.json();
-};
-
-const fetchMovieById = async (id: number): Promise<MovieDetails> => {
-  let response;
-
-  try {
-    response = await fetch(
-      `https://api.themoviedb.org/3/movie/${encodeURIComponent(id)}?language=en-US&append_to_response=videos,credits`,
-      fetchInit,
-    );
-  } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
-    throw new NetworkError(
-      error instanceof Error ? error.message : "Network request failed",
-    );
-  }
-
-  if (!response.ok) {
-    if (response.status === 404) {
+    if (response.status === 404 && path.startsWith("/movie/")) {
       throw new MovieNotFoundError();
     } else if (response.status === 429) {
       throw new TooManyRequestsError();
@@ -157,44 +117,21 @@ const fetchMovieById = async (id: number): Promise<MovieDetails> => {
   return response.json();
 };
 
+const fetchMovieList: (
+  path: string,
+  params?: Record<string, string>,
+) => Promise<MovieListResponse> = fetchTMDB;
+
+const fetchMovieById = (id: number): Promise<MovieDetails> => {
+  return fetchTMDB(`/movie/${encodeURIComponent(id)}`, {
+    append_to_response: "videos,credits",
+  });
+};
+
 const searchMoviesByName = async (
   query: string,
 ): Promise<MovieListResponse> => {
-  let response;
-
-  try {
-    response = await fetch(
-      "https://api.themoviedb.org/3/search/movie?query=" +
-        encodeURIComponent(query),
-      fetchInit,
-    );
-  } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
-    throw new NetworkError(
-      error instanceof Error ? error.message : "Network request failed",
-    );
-  }
-
-  if (!response.ok) {
-    if (response.status === 429) {
-      throw new TooManyRequestsError();
-    } else if (response.status >= 500) {
-      throw new NetworkError(
-        `TMDB server error: ${response.status} ${response.statusText}`,
-      );
-    }
-
-    throw new Error(
-      `TMDB's request failed: ${response.status} ${response.statusText}`,
-    );
-  }
-
-  const data: MovieListResponse = await response.json();
-
-  return data;
+  return fetchTMDB("/search/movie", { query: encodeURIComponent(query) });
 };
 
 export const useSearchMovies = (query: string) => {
@@ -244,4 +181,6 @@ export const useUpcomingMovies = () => {
   });
 };
 
-export const posterBaseUrl = "https://image.tmdb.org/t/p/w500";
+const posterBaseUrl = "https://image.tmdb.org/t/p/";
+export const posterBaseUrlStandard = `${posterBaseUrl}w500`;
+export const posterBaseUrlSmall = `${posterBaseUrl}w300`;

@@ -3,12 +3,21 @@
   <head>
     <script>
       (function () {
-        const stored = localStorage.getItem("theme-storage")?.state?.theme;
+        const raw = localStorage.getItem("theme-storage");
+        let storedTheme;
+
+        try {
+          const parsed = raw ? JSON.parse(raw) : null;
+          storedTheme = parsed?.state?.theme;
+        } catch {
+          storedTheme = undefined;
+        }
+
         const isDark =
-          stored === "dark" ||
-          (stored !== "light" &&
+          storedTheme === "dark" ||
+          (storedTheme !== "light" &&
             window.matchMedia("(prefers-color-scheme: dark)").matches);
-        console.log("Load isDark: ", isDark);
+
         document.documentElement.classList.toggle("dark", isDark);
       })();
     </script>
@@ -17,7 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movie Browser</title>
   </head>
-  <body>
+  <body class="bg-gray-100 dark:bg-[#232323]">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

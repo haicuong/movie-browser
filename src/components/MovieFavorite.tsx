@@ -1,4 +1,6 @@
 import { useFavoritesStore } from "../types/movie";
+import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function MovieFavorite({
   movieId,
@@ -11,23 +13,22 @@ export function MovieFavorite({
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   return (
-    <button
+    <Button
       onClick={(e) => {
         e.stopPropagation();
         toggleFavorite(movieId);
       }}
-      className="hover:cursor-pointer"
+      variant="ghost"
+      className="hover:cursor-pointer p-1 aspect-square"
     >
-      <img
-        src={isFavorite ? "/icon/star.webp" : "/icon/star-border.webp"}
-        alt={isFavorite ? "Favorite" : "Not Favorite"}
-        className={size ? undefined : "w-12 h-12 md:w-6 md:h-6"}
-        style={
-          size
-            ? { width: `${size * 0.25}rem`, height: `${size * 0.25}rem` }
-            : undefined
-        }
-      />
-    </button>
+      {isFavorite ? (
+        <Star
+          size={size ? size * 4 : 24}
+          className="fill-yellow-500 text-yellow-500"
+        />
+      ) : (
+        <Star size={size ? size * 4 : 24} />
+      )}
+    </Button>
   );
 }

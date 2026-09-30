@@ -13,6 +13,7 @@ import {
 } from "./types/tmdb.ts";
 import { useDebounce } from "./types/utilities.ts";
 import { useEffect, useState } from "react";
+// import { toast } from "@/components/ui/toast.tsx";
 
 export default function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -143,7 +144,43 @@ function HomeMovies() {
     </div>
   );
 }
+/* 
+function createToast(
+  message: string,
+  type: "default" | "success" | "error" | "info" | "warning" = "default",
+) {
+  const id = toast.add({
+    title: type === "success" ? "Success" : type === "error" ? "Error" : "Info",
+    description: message,
+    type: type,
+    actionProps: {
+      children: "Undo",
+      onClick: () => toast.close(id),
+    },
+  });
+}
 
+function createToastPromise() {
+  toast.promise(
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const isSuccess = Math.random() > 0.5;
+        if (isSuccess) {
+          resolve("Promise resolved successfully!");
+        } else {
+          reject(new Error("Promise rejected!"));
+        }
+      }, 2000);
+    }),
+    {
+      loading: "Loading...",
+      success: (data) => `Success: ${data}`,
+      error: (error) => `Error: ${error.message}`,
+    },
+  );
+} */
+
+const HOME_MOVIE_LIMIT = 10;
 function HorizontalMovies({
   title,
   movies,
@@ -166,9 +203,11 @@ function HorizontalMovies({
         ) : isError ? (
           <p className="text-gray-500">Unable to load movies.</p>
         ) : movies ? (
-          movies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} variant="carousel" />
-          ))
+          movies
+            .slice(0, HOME_MOVIE_LIMIT)
+            .map((movie) => (
+              <MovieCard key={movie.id} movie={movie} variant="carousel" />
+            ))
         ) : (
           <p className="text-gray-500">Loading...</p>
         )}
