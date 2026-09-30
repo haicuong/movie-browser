@@ -52,7 +52,7 @@ export default function App() {
           onSearch={(query) => setSearchState(query)}
         />
       </Header>
-      <main className="flex flex-col py-4 pb-8 overflow-x-hidden bg-white dark:bg-[#121212] px-4 md:px-6 justify-center flex-1">
+      <main className="flex flex-col py-4 pb-8 overflow-x-hidden bg-background px-4 md:px-6 justify-center flex-1">
         <div className="flex justify-evenly flex-wrap gap-4 p-4">
           {hasSearchQuery ? (
             isSearchPending ? (
@@ -89,7 +89,7 @@ export default function App() {
         </div>
         <Outlet />
       </main>
-      <footer className="bg-gray-300 dark:bg-[#232323] flex flex-col gap-8 p-8">
+      <footer className="bg-secondary flex flex-col gap-8 p-8">
         <span className="font-bold text-xl">Credits</span>
         <div className="flex flex-row gap-4">
           <img src="/credits/TMDB.svg" alt="TMDB logo" className="h-6" />
@@ -197,7 +197,7 @@ function HorizontalMovies({
   return (
     <section className="flex w-full min-w-0 flex-col gap-4">
       <h2 className="text-xl font-bold">{title}</h2>
-      <div className="flex min-w-0 w-full flex-nowrap gap-4 overflow-x-auto overflow-y-hidden py-4 pt-3">
+      <div className="flex min-w-0 w-full px-2 flex-nowrap gap-4 overflow-x-auto overflow-y-hidden py-4 pt-3">
         {isPending ? (
           Array.from({ length: 5 }, (_, index) => (
             <MovieCardSkeleton key={index} variant="carousel" />

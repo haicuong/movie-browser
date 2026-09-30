@@ -19,7 +19,7 @@ export default function SearchBar({
   onSearch: (query: string) => void;
 }) {
   return (
-    <InputGroup className="h-full py-1 bg-gray-300 transition-none">
+    <InputGroup className="h-full py-1 bg-thirdary transition-none">
       <InputGroupAddon>
         <Search className="size-4" />
       </InputGroupAddon>

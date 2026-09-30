@@ -13,18 +13,20 @@ export function MovieCardSkeleton({
   return (
     <article
       aria-hidden="true"
-      className={`relative flex flex-col rounded-md bg-gray-300 p-4 shadow-gray-400 shadow-md dark:bg-[#343434] dark:shadow-gray-600 ${layoutClass}`}
+      className={`relative flex flex-col rounded-md bg-card p-4 shadow-shadow shadow-md ${layoutClass}`}
     >
       <div>
-        <Skeleton className="aspect-2/3 w-full rounded-sm bg-gray-400 dark:bg-[#232323]" />
-        <Skeleton className="mt-3 h-5 w-4/5 rounded bg-gray-400 dark:bg-[#232323]" />
+        <Skeleton className="aspect-2/3 w-full rounded-sm" />
+        <Skeleton className="mt-3 h-5 w-4/5 rounded" />
         <div className="mt-3 space-y-2">
-          <Skeleton className="h-3 w-full rounded bg-gray-400 dark:bg-[#232323]" />
-          <Skeleton className="h-3 w-full rounded bg-gray-400 dark:bg-[#232323]" />
-          <Skeleton className="h-3 w-5/6 rounded bg-gray-400 dark:bg-[#232323]" />
+          <Skeleton className="h-3 w-full rounded" />
+          <Skeleton className="h-3 w-full rounded" />
+          <Skeleton className="h-3 w-5/6 rounded" />
         </div>
       </div>
-      <Skeleton className="absolute -top-2 right-4 w-10 h-10 rounded-lg bg-amber-50 p-1 shadow-gray-400 shadow-md dark:bg-[#232323] dark:shadow-gray-600" />
+      <div className="absolute -top-2 right-4 w-10 h-10 rounded-lg bg-card p-1 shadow-shadow shadow-md">
+        <Skeleton className="w-full h-full" />
+      </div>
     </article>
   );
 }

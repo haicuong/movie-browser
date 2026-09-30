@@ -33,7 +33,7 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
             className="w-full object-contain md:h-64 md:w-fit"
           />
         ) : (
-          <div className="flex min-h-64 w-full items-center justify-center bg-gray-400 text-gray-700 md:w-48 dark:bg-[#232323] dark:text-gray-300">
+          <div className="flex min-h-64 w-full items-center justify-center bg-thirdary text-thirdary-foreground md:w-48">
             No poster available
           </div>
         )}
@@ -50,7 +50,7 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
           </div>
         )}
       </div>
-      <dl className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-600 dark:text-gray-300">
+      <dl className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-card-foreground">
         <div>
           <dt className="sr-only">Rating</dt>
           <dd>Rating: {movie.vote_average.toFixed(1)}/10</dd>
@@ -77,13 +77,11 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
         )}
       </dl>
       {movie.tagline && (
-        <p className="text-lg italic text-gray-600 dark:text-gray-300">
-          {movie.tagline}
-        </p>
+        <p className="text-lg italic text-card-foreground">{movie.tagline}</p>
       )}
       <section>
         <h4 className="mb-1 text-lg font-bold">Overview</h4>
-        <p className="text-gray-600 dark:text-gray-300">
+        <p className="text-card-foreground text-base">
           {movie.overview || "No overview available."}
         </p>
       </section>
@@ -97,7 +95,7 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
                 href={`https://www.themoviedb.org/person/${actor.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-36 shrink-0 rounded p-2 transition-colors hover:bg-gray-400/50 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:hover:bg-[#232323]"
+                className="w-36 shrink-0 rounded p-2 transition-colors hover:bg-thirdary focus:outline-none focus:ring-2 focus:ring-amber-500"
                 aria-label={`View ${actor.name}'s profile on TMDB`}
               >
                 {actor.profile_path ? (
@@ -107,12 +105,12 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
                     className="aspect-2/3 w-full rounded object-cover"
                   />
                 ) : (
-                  <div className="flex aspect-2/3 items-center justify-center rounded bg-gray-400 p-2 text-center text-xs dark:bg-[#232323]">
+                  <div className="flex aspect-2/3 items-center justify-center rounded bg-thirdary p-2 text-center text-xs">
                     No photo
                   </div>
                 )}
                 <p className="mt-1 text-sm font-semibold">{actor.name}</p>
-                <p className="text-xs text-gray-600 dark:text-gray-300">
+                <p className="text-xs text-card-foreground">
                   {actor.character}
                 </p>
               </a>
@@ -121,10 +119,8 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
         </section>
       )}
       {(directors.length > 0 || writers.length > 0) && (
-        <section className="text-gray-600 dark:text-gray-300">
-          <h4 className="mb-1 text-lg font-bold text-black dark:text-white">
-            Crew
-          </h4>
+        <section className="text-card-foreground">
+          <h4 className="mb-1 text-lg font-bold text-card-foreground">Crew</h4>
           {directors.length > 0 && (
             <p>
               Director:{" "}

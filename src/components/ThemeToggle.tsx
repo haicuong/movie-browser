@@ -19,9 +19,9 @@ export function ThemeToggle() {
         render={
           <Button
             onClick={toggleTheme}
-            variant="ghost"
+            variant="thirdary"
             aria-label={`Toggle to ${nextTheme} theme`}
-            className="bg-gray-300 hover:bg-gray-300 aspect-square transition-none hover:cursor-pointer dark:bg-[#343434] dark:hover:bg-[#343434] rounded-2xl size-12"
+            className="aspect-square transition-none hover:cursor-pointer rounded-2xl size-12"
           >
             {theme === "light" ? (
               <Moon className="size-7" />

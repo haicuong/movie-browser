@@ -16,10 +16,10 @@ export default function MovieCard({
 
   return (
     <article
-      className={`relative flex flex-col text-start rounded-md bg-gray-300 p-4 shadow-gray-400 shadow-md transition-shadow duration-300 hover:shadow-lg dark:bg-[#343434] dark:shadow-gray-600 ${layoutClass}`}
+      className={`relative flex flex-col text-start rounded-md bg-card p-4 shadow-shadow shadow-md transition-shadow duration-300 hover:shadow-lg ${layoutClass}`}
     >
       <Link to={`/movies/${movie.id}`} className="flex flex-1 flex-col gap-2">
-        <div className="mb-2 aspect-2/3 w-full overflow-hidden rounded-sm bg-gray-400 dark:bg-[#232323]">
+        <div className="mb-2 aspect-2/3 w-full overflow-hidden rounded-sm bg-thirdary">
           {movie.poster_path ? (
             <img
               loading="lazy"
@@ -29,17 +29,15 @@ export default function MovieCard({
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full items-center justify-center p-4 text-center text-base text-gray-700 dark:text-gray-300">
+            <div className="flex h-full items-center justify-center p-4 text-center text-base text-thirdary-foreground">
               Poster unavailable
             </div>
           )}
         </div>
         <h3 className="text-lg font-bold line-clamp-1">{movie.title}</h3>
       </Link>
-      <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
-        {movie.overview}
-      </p>
-      <div className="absolute -top-2 right-4 bg-amber-50 dark:bg-[#232323] rounded-lg p-1 shadow-gray-400 dark:shadow-gray-600 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <p className="text-muted-foreground line-clamp-3">{movie.overview}</p>
+      <div className="absolute -top-2 right-4 bg-secondary rounded-lg p-1 shadow-shadow shadow-md hover:shadow-lg transition-shadow duration-300">
         <MovieFavorite movieId={movie.id} />
       </div>
     </article>

@@ -33,7 +33,7 @@ export function MovieModal() {
         if (!open) navigate("/", { replace: true });
       }}
     >
-      <DialogContent className="flex h-[90%] overflow-y-hidden w-[90%] flex-col gap-2 rounded-md bg-gray-100 p-4 dark:bg-[#343434]">
+      <DialogContent className="flex h-[90%] overflow-y-hidden w-[90%] flex-col gap-2 rounded-md bg-card p-4">
         {error || !isValidMovieId ? (
           <MovieModalError
             error={error}
@@ -54,14 +54,14 @@ export function MovieModal() {
                       {movie.title}
                     </span>
                     {movie.release_date && (
-                      <span className="ml-2 text-gray-600 dark:text-gray-300">
+                      <span className="ml-2 text-muted-foreground">
                         ({movie.release_date?.slice(0, 4)})
                       </span>
                     )}
                   </h3>
                   {movie.original_title &&
                     movie.original_title !== movie.title && (
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <p className="text-sm text-muted-foreground">
                         Original title: {movie.original_title}
                       </p>
                     )}
