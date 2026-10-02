@@ -14,7 +14,7 @@ import {
 import { useDebounce } from "./types/utilities.ts";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
-// import { toast } from "@/components/ui/toast.tsx";
+import { motion } from "motion/react";
 
 export default function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,37 +52,65 @@ export default function App() {
           onSearch={(query) => setSearchState(query)}
         />
       </Header>
-      <main className="flex flex-col py-4 pb-8 overflow-x-hidden bg-background px-4 md:px-6 justify-center flex-1">
-        <div className="flex justify-evenly flex-wrap gap-4 p-4">
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {hasSearchQuery && isSearchPending
+          ? "Loading search results."
+          : hasSearchQuery && isSuccess && movies
+            ? `${movies.results.length} search results found.`
+            : hasSearchQuery && isError
+              ? "Unable to load search results."
+              : ""}
+      </div>
+      <main className="flex flex-col h-full py-4 pb-8 overflow-x-hidden bg-background px-4 md:px-6 justify-center flex-1">
+        <div className="relative flex-1 p-4">
+          {hasSearchQuery && (
+            <div className="w-full top-3 absolute">
+              <motion.h2
+                key="search-results"
+                className="text-xl font-bold"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                Search results for "{searchState}"
+              </motion.h2>
+            </div>
+          )}
           {hasSearchQuery ? (
-            isSearchPending ? (
-              Array.from({ length: 6 }, (_, index) => (
-                <MovieCardSkeleton key={index} />
-              ))
-            ) : isSuccess && movies ? (
-              movies.results.length === 0 ? (
-                <div className="w-full flex flex-col justify-center items-center gap-4 text-center">
-                  <span className="font-bold text-xl">
-                    No results found for "{searchQuery}".
-                  </span>
-                  <Button
-                    onClick={onHome}
-                    variant="secondary"
-                    className="px-4 py-6"
-                  >
-                    Go back to the home page
-                  </Button>
-                </div>
-              ) : (
-                movies.results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))
-              )
-            ) : isError ? (
-              <p className="w-full text-center text-gray-500">
-                Unable to load search results.
-              </p>
-            ) : null
+            <div className="flex flex-1 mt-14 justify-evenly flex-wrap gap-4 items-stretch">
+              {isSearchPending ? (
+                <>
+                  {Array.from({ length: 20 }, (_, index) => (
+                    <MovieCardSkeleton key={index} />
+                  ))}
+                </>
+              ) : isSuccess && movies ? (
+                movies.results.length === 0 ? (
+                  <div className="w-full flex flex-col justify-center items-center gap-4 text-center">
+                    <span className="font-bold text-xl">
+                      No results found for "{searchQuery}".
+                    </span>
+                    <Button
+                      onClick={onHome}
+                      variant="secondary"
+                      className="px-4 py-6 hover:cursor-pointer"
+                    >
+                      Go back to the home page
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    {movies.results.map((movie) => (
+                      <MovieCard key={movie.id} movie={movie} />
+                    ))}
+                  </>
+                )
+              ) : isError ? (
+                <p className="w-full absolute text-center text-muted-foreground">
+                  Unable to load search results.
+                </p>
+              ) : null}
+            </div>
           ) : (
             <HomeMovies />
           )}
@@ -146,41 +174,6 @@ function HomeMovies() {
     </div>
   );
 }
-/* 
-function createToast(
-  message: string,
-  type: "default" | "success" | "error" | "info" | "warning" = "default",
-) {
-  const id = toast.add({
-    title: type === "success" ? "Success" : type === "error" ? "Error" : "Info",
-    description: message,
-    type: type,
-    actionProps: {
-      children: "Undo",
-      onClick: () => toast.close(id),
-    },
-  });
-}
-
-function createToastPromise() {
-  toast.promise(
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const isSuccess = Math.random() > 0.5;
-        if (isSuccess) {
-          resolve("Promise resolved successfully!");
-        } else {
-          reject(new Error("Promise rejected!"));
-        }
-      }, 2000);
-    }),
-    {
-      loading: "Loading...",
-      success: (data) => `Success: ${data}`,
-      error: (error) => `Error: ${error.message}`,
-    },
-  );
-} */
 
 const HOME_MOVIE_LIMIT = 10;
 function HorizontalMovies({
@@ -203,7 +196,7 @@ function HorizontalMovies({
             <MovieCardSkeleton key={index} variant="carousel" />
           ))
         ) : isError ? (
-          <p className="text-gray-500">Unable to load movies.</p>
+          <p className="text-muted-foreground">Unable to load movies.</p>
         ) : movies ? (
           movies
             .slice(0, HOME_MOVIE_LIMIT)
@@ -211,7 +204,7 @@ function HorizontalMovies({
               <MovieCard key={movie.id} movie={movie} variant="carousel" />
             ))
         ) : (
-          <p className="text-gray-500">Loading...</p>
+          <p className="text-muted-foreground">Loading...</p>
         )}
       </div>
     </section>

@@ -1,31 +1,34 @@
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { cn } from "cn";
+import { layoutClass, movieCardClassName } from "@/types/movie";
+import { useThemeStore } from "@/types/utilities";
+import { Star } from "lucide-react";
 
 export function MovieCardSkeleton({
   variant = "grid",
 }: {
   variant?: "grid" | "carousel";
 }) {
-  const layoutClass =
-    variant === "carousel"
-      ? "w-[78vw] max-w-72 shrink-0"
-      : "w-full min-w-64 md:max-w-[25vw]";
+  const isThemeToggling = useThemeStore((state) => state.isThemeToggling);
 
   return (
     <article
       aria-hidden="true"
-      className={`relative flex flex-col rounded-md bg-card p-4 shadow-shadow shadow-md ${layoutClass}`}
+      className={cn(
+        `${movieCardClassName} ${isThemeToggling ? "duration-0" : ""} ${layoutClass(variant)}`,
+      )}
     >
       <div>
         <Skeleton className="aspect-2/3 w-full rounded-sm" />
-        <Skeleton className="mt-3 h-5 w-4/5 rounded" />
-        <div className="mt-3 space-y-2">
-          <Skeleton className="h-3 w-full rounded" />
-          <Skeleton className="h-3 w-full rounded" />
-          <Skeleton className="h-3 w-5/6 rounded" />
+        <Skeleton className="mt-4 h-5 w-4/5 rounded" />
+        <div className="mt-3 mb-1 space-y-2">
+          <Skeleton className="h-4 w-full rounded" />
+          <Skeleton className="h-4 w-full rounded" />
+          <Skeleton className="h-4 w-5/6 rounded" />
         </div>
       </div>
-      <div className="absolute -top-2 right-4 w-10 h-10 rounded-lg bg-card p-1 shadow-shadow shadow-md">
-        <Skeleton className="w-full h-full" />
+      <div className="absolute flex aspect-square items-center justify-center -top-2 right-4 md:w-10 md:h-10 w-12 h-12 rounded-lg bg-card p-1 shadow-shadow shadow-md">
+        <Star className="size-8 md:size-6 fill-thirdary text-thirdary animate-pulse" />
       </div>
     </article>
   );

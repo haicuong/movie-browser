@@ -27,6 +27,7 @@ export default function SearchBar({
         onChange={(e) => onSearch(e.target.value)}
         value={searchQuery}
         type="text"
+        aria-label="Search movies"
         placeholder="Search movies..."
       />
       <InputGroupAddon className="min-w-7" align="inline-end">

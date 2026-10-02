@@ -89,10 +89,6 @@ const fetchTMDB = async (path: string, params: Record<string, string> = {}) => {
       },
     );
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw error;
-    }
-
     throw new NetworkError(
       error instanceof Error ? error.message : "Network request failed",
     );

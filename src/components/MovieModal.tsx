@@ -22,7 +22,13 @@ export function MovieModal() {
 
   const isValidMovieId = Number.isInteger(parsedMovieId) && parsedMovieId > 0;
 
-  const { data: movie, error, refetch } = useMovieId(parsedMovieId);
+  const {
+    data: movie,
+    error,
+    refetch,
+    isPending,
+    isPaused,
+  } = useMovieId(parsedMovieId);
 
   const [countDown, resetCountDown] = useCountDown(5);
 
@@ -34,22 +40,27 @@ export function MovieModal() {
       }}
     >
       <DialogContent className="flex h-[90%] overflow-y-hidden w-[90%] flex-col gap-2 rounded-md bg-card p-4">
-        {error || !isValidMovieId ? (
-          <MovieModalError
-            error={error}
-            isValidMovieId={isValidMovieId}
-            countDown={countDown}
-            onRetry={() => {
-              resetCountDown();
-              refetch();
-            }}
-          />
+        {error || !isValidMovieId || (isPending && isPaused) ? (
+          <>
+            <DialogTitle className="sr-only">Movie error</DialogTitle>
+            <MovieModalError
+              error={error}
+              isValidMovieId={isValidMovieId}
+              countDown={countDown}
+              isOffline={isPending && isPaused}
+              onRetry={() => {
+                resetCountDown();
+                refetch();
+              }}
+            />
+          </>
         ) : movie ? (
           <>
             <DialogHeader>
+              <DialogTitle className="sr-only">Movie details</DialogTitle>
               <DialogTitle className="flex items-center gap-2 h-fit max-w-[90%]">
                 <div className="flex flex-col gap-2 w-fit">
-                  <h3 className="text-lg max-w-full">
+                  <div className="text-lg max-w-full">
                     <span className="whitespace-normal wrap-break-word font-bold">
                       {movie.title}
                     </span>
@@ -58,7 +69,7 @@ export function MovieModal() {
                         ({movie.release_date?.slice(0, 4)})
                       </span>
                     )}
-                  </h3>
+                  </div>
                   {movie.original_title &&
                     movie.original_title !== movie.title && (
                       <p className="text-sm text-muted-foreground">
@@ -72,7 +83,10 @@ export function MovieModal() {
             <MovieModalContent movie={movie} />
           </>
         ) : (
-          <MovieModalSkeleton />
+          <>
+            <DialogTitle className="sr-only">Loading movie details</DialogTitle>
+            <MovieModalSkeleton />
+          </>
         )}
       </DialogContent>
     </Dialog>

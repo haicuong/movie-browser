@@ -12,6 +12,7 @@ import {
   TooManyRequestsError,
 } from "./types/custom-errors.ts";
 import { TooltipProvider } from "@/components/ui/tooltip.tsx";
+import { MotionConfig } from "motion/react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,10 +47,15 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <TooltipProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </TooltipProvider>
+    <MotionConfig
+      reducedMotion="user"
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+    >
+      <TooltipProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </TooltipProvider>
+    </MotionConfig>
   </StrictMode>,
 );

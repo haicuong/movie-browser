@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { Star } from "lucide-react";
 
 export function MovieModalSkeleton() {
   return (
@@ -13,7 +14,7 @@ export function MovieModalSkeleton() {
             <Skeleton className="h-6 w-56 rounded" />
             <Skeleton className="h-4 w-40 rounded" />
           </div>
-          <Skeleton className="size-6 rounded-lg" />
+          <Star className="size-8 md:size-6 fill-thirdary text-thirdary animate-pulse" />
         </div>
       </div>
 

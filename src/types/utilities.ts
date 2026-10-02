@@ -59,7 +59,7 @@ function getInitialTheme(): "light" | "dark" {
 
 export const useThemeStore = create(
   persist(
-    combine({ theme: getInitialTheme() }, (set) => ({
+    combine({ theme: getInitialTheme(), isThemeToggling: false }, (set) => ({
       toggleTheme: () => {
         set((state) => {
           const newTheme = state.theme === "light" ? "dark" : "light";
@@ -67,7 +67,11 @@ export const useThemeStore = create(
             "dark",
             newTheme === "dark",
           );
-          return { theme: newTheme };
+
+          setTimeout(() => {
+            set({ isThemeToggling: false });
+          }, 0);
+          return { theme: newTheme, isThemeToggling: true };
         });
       },
     })),
