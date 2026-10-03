@@ -4,7 +4,7 @@ import {
   NetworkError,
   TooManyRequestsError,
 } from "@/lib/errors.ts";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 
 export default function MovieModalError({
   error,

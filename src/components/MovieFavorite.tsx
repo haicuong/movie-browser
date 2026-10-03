@@ -4,7 +4,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip.tsx";
+} from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "motion/react";
 import type { MovieListItem } from "@/types/movie";
 import useFavoritesStore from "@/hooks/useFavoritesStore";

@@ -1,9 +1,9 @@
-import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { Skeleton } from "@/components/ui/skeleton";
 import { layoutClass, movieCardClassName } from "@/lib/movie-formatter";
 import { cn } from "cn";
 import { Star } from "lucide-react";
 
-export function MovieCardSkeleton({
+export default function MovieCardSkeleton({
   variant = "grid",
 }: {
   variant?: "grid" | "carousel";

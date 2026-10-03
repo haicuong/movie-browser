@@ -1,10 +1,10 @@
 import { Sun, Moon } from "lucide-react";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip.tsx";
+} from "@/components/ui/tooltip";
 import { AnimatePresence, motion } from "motion/react";
 import useThemeStore from "@/hooks/useThemeStore";
 

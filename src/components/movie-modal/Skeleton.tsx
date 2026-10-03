@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Star } from "lucide-react";
 
 export default function MovieModalSkeleton() {

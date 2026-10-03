@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useNavigate } from "react-router";
 import MovieModalContent from "@/components/movie-modal/Content";
 import MovieModalError from "@/components/movie-modal/Error";
@@ -10,9 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { MovieFavorite } from "@/components/MovieFavorite.tsx";
+import { MovieFavorite } from "@/components/MovieFavorite";
 import { ErrorBoundary } from "react-error-boundary";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import useMovieId from "@/hooks/movie/useMovieId";
 import useCountDown from "@/hooks/useCountDown";
 
@@ -35,11 +35,18 @@ export default function MovieModal() {
 
   const [countDown, resetCountDown] = useCountDown(5);
 
+  const { search, hash } = useLocation();
+
   return (
     <Dialog
       open={true}
       onOpenChange={(open) => {
-        if (!open) navigate("/", { replace: true });
+        if (!open)
+          navigate({
+            pathname: "/",
+            search,
+            hash,
+          });
       }}
     >
       <DialogContent className="flex h-[90%] overflow-y-hidden w-[90%] flex-col gap-2 rounded-md bg-card p-4">

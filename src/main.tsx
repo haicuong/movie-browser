@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@/index.css";
-import App from "@/App.tsx";
+import App from "@/App";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import MovieModal from "@/components/movie-modal/MovieModal";
@@ -11,10 +11,10 @@ import {
   NetworkError,
   TooManyRequestsError,
 } from "@/lib/errors";
-import { TooltipProvider } from "@/components/ui/tooltip.tsx";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { MotionConfig } from "motion/react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import { logError } from "@/lib/utils";
 
 const queryClient = new QueryClient({

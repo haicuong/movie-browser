@@ -1,10 +1,10 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { posterBaseUrlStandard } from "@/api/TMDB";
 import { MovieFavorite } from "@/components/MovieFavorite";
 import { motion } from "motion/react";
 import { cn } from "cn";
 import { ErrorBoundary } from "react-error-boundary";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import { logError } from "@/lib/utils";
 import type { MovieListItem } from "@/types/movie";
 import { layoutClass, movieCardClassName } from "@/lib/movie-formatter";
@@ -16,6 +16,8 @@ export default function MovieCard({
   movie: MovieListItem;
   variant?: "grid" | "carousel";
 }) {
+  const { search, hash } = useLocation();
+
   return (
     <article className={cn(`${movieCardClassName} ${layoutClass(variant)}`)}>
       <ErrorBoundary
@@ -32,7 +34,7 @@ export default function MovieCard({
         )}
       >
         <Link
-          to={`/movies/${movie.id}`}
+          to={{ pathname: `/movies/${movie.id}`, search, hash }}
           className="flex flex-1 flex-col gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
           <div className="mb-2 aspect-2/3 w-full overflow-hidden rounded-sm bg-thirdary">
