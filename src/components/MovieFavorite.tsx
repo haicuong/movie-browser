@@ -1,4 +1,3 @@
-import { useFavoritesStore } from "../types/movie";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,7 +6,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 import { motion, AnimatePresence } from "motion/react";
-import type { MovieListItem } from "@/types/tmdb";
+import type { MovieListItem } from "@/types/movie";
+import useFavoritesStore from "@/hooks/useFavoritesStore";
 
 const MotionStar = motion.create(Star);
 

@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { Star } from "lucide-react";
 
-export function MovieModalSkeleton() {
+export default function MovieModalSkeleton() {
   return (
     <div
       role="status"

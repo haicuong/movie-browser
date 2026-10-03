@@ -1,12 +1,13 @@
 import { Link } from "react-router";
-import { posterBaseUrlStandard, type MovieListItem } from "@/types/tmdb.ts";
+import { posterBaseUrlStandard } from "@/api/TMDB";
 import { MovieFavorite } from "@/components/MovieFavorite";
-import { layoutClass, movieCardClassName } from "@/types/movie.ts";
 import { motion } from "motion/react";
 import { cn } from "cn";
 import { ErrorBoundary } from "react-error-boundary";
 import { Button } from "@/components/ui/button.tsx";
-import { logError } from "@/types/utilities.ts";
+import { logError } from "@/lib/utils";
+import type { MovieListItem } from "@/types/movie";
+import { layoutClass, movieCardClassName } from "@/lib/movie-formatter";
 
 export default function MovieCard({
   movie,

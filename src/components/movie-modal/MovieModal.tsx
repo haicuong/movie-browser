@@ -1,10 +1,9 @@
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
-import { MovieModalContent } from "@/components/MovieModalContent.tsx";
-import { MovieModalError } from "@/components/MovieModalError.tsx";
-import { MovieModalSkeleton } from "@/components/MovieModalSkeleton.tsx";
-import { useMovieId } from "@/types/tmdb.ts";
-import { logError, useCountDown } from "@/types/utilities.ts";
+import MovieModalContent from "@/components/movie-modal/Content";
+import MovieModalError from "@/components/movie-modal/Error";
+import MovieModalSkeleton from "@/components/movie-modal/Skeleton";
+import { logError } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -14,8 +13,10 @@ import {
 import { MovieFavorite } from "@/components/MovieFavorite.tsx";
 import { ErrorBoundary } from "react-error-boundary";
 import { Button } from "@/components/ui/button.tsx";
+import useMovieId from "@/hooks/movie/useMovieId";
+import useCountDown from "@/hooks/useCountDown";
 
-export function MovieModal() {
+export default function MovieModal() {
   const navigate = useNavigate();
   const movieId = useParams<{ id: string }>();
 
@@ -65,6 +66,10 @@ export function MovieModal() {
           {error || !isValidMovieId || (isPending && isPaused) ? (
             <>
               <DialogTitle className="sr-only">Movie error</DialogTitle>
+              <title>
+                {`An error occurred while loading the movie details`} | Movie
+                Browser
+              </title>
               <MovieModalError
                 error={error}
                 isValidMovieId={isValidMovieId}
@@ -78,6 +83,7 @@ export function MovieModal() {
             </>
           ) : movie ? (
             <>
+              <title>{`${movie.title} | Movie Browser`}</title>
               <DialogHeader>
                 <DialogTitle className="sr-only">Movie details</DialogTitle>
                 <DialogTitle className="flex items-center gap-2 h-fit max-w-[90%]">

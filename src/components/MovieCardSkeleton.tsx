@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { layoutClass, movieCardClassName } from "@/lib/movie-formatter";
 import { cn } from "cn";
-import { layoutClass, movieCardClassName } from "@/types/movie";
 import { Star } from "lucide-react";
 
 export function MovieCardSkeleton({

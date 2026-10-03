@@ -1,4 +1,3 @@
-import { useThemeStore } from "@/types/utilities.ts";
 import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -7,6 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 import { AnimatePresence, motion } from "motion/react";
+import useThemeStore from "@/hooks/useThemeStore";
 
 const MotionMoon = motion.create(Moon);
 const MotionSun = motion.create(Sun);

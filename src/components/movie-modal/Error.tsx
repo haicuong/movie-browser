@@ -3,24 +3,22 @@ import {
   MovieNotFoundError,
   NetworkError,
   TooManyRequestsError,
-} from "../types/custom-errors.ts";
+} from "@/lib/errors.ts";
 import { Button } from "@/components/ui/button.tsx";
 
-type MovieModalErrorProps = {
-  error: Error | null;
-  isValidMovieId: boolean;
-  countDown: number;
-  isOffline: boolean;
-  onRetry: () => void;
-};
-
-export function MovieModalError({
+export default function MovieModalError({
   error,
   isValidMovieId,
   countDown,
   isOffline,
   onRetry,
-}: MovieModalErrorProps) {
+}: {
+  error: Error | null;
+  isValidMovieId: boolean;
+  countDown: number;
+  isOffline: boolean;
+  onRetry: () => void;
+}) {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center text-center">
       {error instanceof MovieNotFoundError || !isValidMovieId ? (

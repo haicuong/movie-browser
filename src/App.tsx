@@ -3,20 +3,19 @@ import MovieCard from "@/components/MovieCard";
 import { MovieCardSkeleton } from "@/components/MovieCardSkeleton.tsx";
 import { Outlet, useSearchParams } from "react-router";
 import SearchBar from "@/components/SearchBar.tsx";
-import {
-  useNowPlayingMovies,
-  usePopularMovies,
-  useSearchMovies,
-  useTrendingMovies,
-  useUpcomingMovies,
-  type MovieListItem,
-} from "@/types/tmdb.ts";
-import { logError, useDebounce } from "@/types/utilities.ts";
+import { logError } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { motion } from "motion/react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useFavoritesStore } from "@/types/movie";
+import useFavoritesStore from "@/hooks/useFavoritesStore";
+import useDebounce from "@/hooks/useDebounce";
+import useSearchMovies from "@/hooks/movie/useSearchMovies";
+import useTrendingMovies from "@/hooks/movie/useTrendingMovies";
+import usePopularMovies from "@/hooks/movie/usePopularMovies";
+import useNowPlayingMovies from "@/hooks/movie/useNowPlayingMovies";
+import useUpcomingMovies from "@/hooks/movie/useUpcomingMovies";
+import type { MovieListItem } from "@/types/movie";
 
 export default function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -67,6 +66,7 @@ export default function App() {
         <div className="relative flex-1 p-4">
           {hasSearchQuery ? (
             <>
+              <title>{`Search results for "${searchState}" | Movie Browser`}</title>
               <div className="w-full top-3 absolute">
                 <motion.h2
                   key="search-results"

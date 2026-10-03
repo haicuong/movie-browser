@@ -1,10 +1,7 @@
-import { posterBaseUrlStandard, type MovieDetails } from "../types/tmdb.ts";
+import { posterBaseUrlStandard } from "@/api/TMDB.ts";
+import type { MovieDetails } from "@/types/movie";
 
-type MovieModalContentProps = {
-  movie: MovieDetails;
-};
-
-export function MovieModalContent({ movie }: MovieModalContentProps) {
+export default function MovieModalContent({ movie }: { movie: MovieDetails }) {
   const trailer =
     movie.videos?.results.find(
       (video) =>
@@ -100,7 +97,7 @@ export function MovieModalContent({ movie }: MovieModalContentProps) {
               >
                 {actor.profile_path ? (
                   <img
-                    src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
+                    src={`${posterBaseUrlStandard}${actor.profile_path}`}
                     alt={actor.name}
                     className="aspect-2/3 w-full rounded object-cover"
                   />

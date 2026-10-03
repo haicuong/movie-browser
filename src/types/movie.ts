@@ -1,31 +1,64 @@
-import { create } from "zustand";
-import { combine, persist } from "zustand/middleware";
-import "../vite-env.d.ts";
-import type { MovieListItem } from "@/types/tmdb.ts";
-
-export const movieCardClassName =
-  "relative flex flex-col motion-safe:hover:scale-[1.02] text-start rounded-md bg-card p-4 shadow-secondary-foreground shadow-md transition-[box-shadow,scale] duration-300 hover:shadow-lg";
-export const layoutClass = (variant: "grid" | "carousel" = "carousel") => {
-  return variant === "carousel"
-    ? "w-[78vw] max-w-72 shrink-0"
-    : "w-full min-w-64 md:max-w-[25vw]";
+type Genre = {
+  id: number;
+  name: string;
 };
 
-export const useFavoritesStore = create(
-  persist(
-    combine({ favoriteMovies: [] as MovieListItem[] }, (set, get) => ({
-      toggleFavorite: (movie: MovieListItem) =>
-        set((state) => ({
-          favoriteMovies: state.favoriteMovies.some((m) => m.id === movie.id)
-            ? state.favoriteMovies.filter((m) => m.id !== movie.id)
-            : [...state.favoriteMovies, movie],
-        })),
-      isFavorite: (movie: MovieListItem) =>
-        get().favoriteMovies.some((m) => m.id === movie.id),
-    })),
-    {
-      name: "favorites-storage",
-      partialize: (state) => ({ favoriteMovies: state.favoriteMovies }),
-    },
-  ),
-);
+export type MovieDetails = {
+  id: number;
+  title: string;
+  release_date: string;
+  poster_path: string | null;
+  vote_average: number;
+  genres: Genre[];
+  overview: string;
+  videos: {
+    results: MovieVideo[];
+  };
+  runtime: number | null;
+  tagline: string;
+  original_title: string | null;
+  original_language: string;
+  credits: {
+    cast: MovieCast[];
+    crew: MovieCrew[];
+  };
+};
+
+type MovieCast = {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  order: number;
+};
+
+type MovieCrew = {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+};
+
+type MovieVideo = {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+};
+
+export type MovieListItem = {
+  id: number;
+  title: string;
+  poster_path: string | null;
+  overview: string;
+};
+
+export type MovieListResponse = {
+  page: number;
+  results: MovieListItem[];
+  total_pages: number;
+  total_results: number;
+};
