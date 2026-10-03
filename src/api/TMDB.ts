@@ -2,7 +2,7 @@ import {
   MovieNotFoundError,
   NetworkError,
   TooManyRequestsError,
-} from "../lib/errors";
+} from "@/lib/errors";
 import type { MovieDetails, MovieListResponse } from "@/types/movie";
 
 export async function fetchTMDB(
@@ -13,19 +13,13 @@ export async function fetchTMDB(
     language: "en-US",
     page: "1",
     ...params,
+    path,
   });
 
   let response;
 
   try {
-    response = await fetch(
-      `https://api.themoviedb.org/3${path}?${searchParams}`,
-      {
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-        },
-      },
-    );
+    response = await fetch(`/api/tmdb-proxy?${searchParams}`);
   } catch (error) {
     throw new NetworkError(
       error instanceof Error ? error.message : "Network request failed",
@@ -37,7 +31,7 @@ export async function fetchTMDB(
       throw new MovieNotFoundError();
     } else if (response.status === 429) {
       throw new TooManyRequestsError();
-    } else if (response.status >= 500) {
+    } else if (response.status > 500) {
       throw new NetworkError(
         `Network error: ${response.status} ${response.statusText}`,
       );
