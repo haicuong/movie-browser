@@ -7,11 +7,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 import { motion, AnimatePresence } from "motion/react";
+import type { MovieListItem } from "@/types/tmdb";
 
 const MotionStar = motion.create(Star);
 
-export function MovieFavorite({ movieId }: { movieId: number }) {
-  const isFavorite = useFavoritesStore((state) => state.isFavorite(movieId));
+export function MovieFavorite({ movie }: { movie: MovieListItem }) {
+  const isFavorite = useFavoritesStore((state) => state.isFavorite(movie));
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   return (
@@ -21,7 +22,7 @@ export function MovieFavorite({ movieId }: { movieId: number }) {
           <Button
             onClick={(e) => {
               e.stopPropagation();
-              toggleFavorite(movieId);
+              toggleFavorite(movie);
             }}
             variant="ghost"
             aria-label={

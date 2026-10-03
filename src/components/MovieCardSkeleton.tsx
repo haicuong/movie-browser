@@ -1,7 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton.tsx";
 import { cn } from "cn";
 import { layoutClass, movieCardClassName } from "@/types/movie";
-import { useThemeStore } from "@/types/utilities";
 import { Star } from "lucide-react";
 
 export function MovieCardSkeleton({
@@ -9,14 +8,10 @@ export function MovieCardSkeleton({
 }: {
   variant?: "grid" | "carousel";
 }) {
-  const isThemeToggling = useThemeStore((state) => state.isThemeToggling);
-
   return (
     <article
       aria-hidden="true"
-      className={cn(
-        `${movieCardClassName} ${isThemeToggling ? "duration-0" : ""} ${layoutClass(variant)}`,
-      )}
+      className={cn(`${movieCardClassName} ${layoutClass(variant)}`)}
     >
       <div>
         <Skeleton className="aspect-2/3 w-full rounded-sm" />

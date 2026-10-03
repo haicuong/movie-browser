@@ -1,17 +1,19 @@
 import { useParams } from "react-router";
 import { useNavigate } from "react-router";
-import { MovieModalContent } from "./MovieModalContent.tsx";
-import { MovieModalError } from "./MovieModalError.tsx";
-import { MovieModalSkeleton } from "./MovieModalSkeleton.tsx";
-import { useMovieId } from "../types/tmdb.ts";
-import { useCountDown } from "../types/utilities.ts";
+import { MovieModalContent } from "@/components/MovieModalContent.tsx";
+import { MovieModalError } from "@/components/MovieModalError.tsx";
+import { MovieModalSkeleton } from "@/components/MovieModalSkeleton.tsx";
+import { useMovieId } from "@/types/tmdb.ts";
+import { logError, useCountDown } from "@/types/utilities.ts";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { MovieFavorite } from "./MovieFavorite.tsx";
+import { MovieFavorite } from "@/components/MovieFavorite.tsx";
+import { ErrorBoundary } from "react-error-boundary";
+import { Button } from "@/components/ui/button.tsx";
 
 export function MovieModal() {
   const navigate = useNavigate();
@@ -40,54 +42,77 @@ export function MovieModal() {
       }}
     >
       <DialogContent className="flex h-[90%] overflow-y-hidden w-[90%] flex-col gap-2 rounded-md bg-card p-4">
-        {error || !isValidMovieId || (isPending && isPaused) ? (
-          <>
-            <DialogTitle className="sr-only">Movie error</DialogTitle>
-            <MovieModalError
-              error={error}
-              isValidMovieId={isValidMovieId}
-              countDown={countDown}
-              isOffline={isPending && isPaused}
-              onRetry={() => {
-                resetCountDown();
-                refetch();
-              }}
-            />
-          </>
-        ) : movie ? (
-          <>
-            <DialogHeader>
-              <DialogTitle className="sr-only">Movie details</DialogTitle>
-              <DialogTitle className="flex items-center gap-2 h-fit max-w-[90%]">
-                <div className="flex flex-col gap-2 w-fit">
-                  <div className="text-lg max-w-full">
-                    <span className="whitespace-normal wrap-break-word font-bold">
-                      {movie.title}
-                    </span>
-                    {movie.release_date && (
-                      <span className="ml-2 text-muted-foreground">
-                        ({movie.release_date?.slice(0, 4)})
+        <ErrorBoundary
+          onError={logError}
+          resetKeys={[parsedMovieId]}
+          fallbackRender={({ resetErrorBoundary }) => (
+            <div className="flex h-full w-full flex-col items-center justify-center text-center">
+              <h2 className="text-2xl font-bold">Unexpected error occurred.</h2>
+              <p className="text-muted-foreground">
+                An unexpected error occurred while loading the movie details.
+              </p>
+              <Button
+                onClick={() => {
+                  resetErrorBoundary();
+                }}
+                className="mt-4 px-4 py-2"
+              >
+                Try Again
+              </Button>
+            </div>
+          )}
+        >
+          {error || !isValidMovieId || (isPending && isPaused) ? (
+            <>
+              <DialogTitle className="sr-only">Movie error</DialogTitle>
+              <MovieModalError
+                error={error}
+                isValidMovieId={isValidMovieId}
+                countDown={countDown}
+                isOffline={isPending && isPaused}
+                onRetry={() => {
+                  resetCountDown();
+                  refetch();
+                }}
+              />
+            </>
+          ) : movie ? (
+            <>
+              <DialogHeader>
+                <DialogTitle className="sr-only">Movie details</DialogTitle>
+                <DialogTitle className="flex items-center gap-2 h-fit max-w-[90%]">
+                  <div className="flex flex-col gap-2 w-fit">
+                    <div className="text-lg max-w-full">
+                      <span className="whitespace-normal wrap-break-word font-bold">
+                        {movie.title}
                       </span>
-                    )}
+                      {movie.release_date && (
+                        <span className="ml-2 text-muted-foreground">
+                          ({movie.release_date?.slice(0, 4)})
+                        </span>
+                      )}
+                    </div>
+                    {movie.original_title &&
+                      movie.original_title !== movie.title && (
+                        <p className="text-sm text-muted-foreground">
+                          Original title: {movie.original_title}
+                        </p>
+                      )}
                   </div>
-                  {movie.original_title &&
-                    movie.original_title !== movie.title && (
-                      <p className="text-sm text-muted-foreground">
-                        Original title: {movie.original_title}
-                      </p>
-                    )}
-                </div>
-                <MovieFavorite movieId={movie.id} />
+                  <MovieFavorite movie={movie} />
+                </DialogTitle>
+              </DialogHeader>
+              <MovieModalContent movie={movie} />
+            </>
+          ) : (
+            <>
+              <DialogTitle className="sr-only">
+                Loading movie details
               </DialogTitle>
-            </DialogHeader>
-            <MovieModalContent movie={movie} />
-          </>
-        ) : (
-          <>
-            <DialogTitle className="sr-only">Loading movie details</DialogTitle>
-            <MovieModalSkeleton />
-          </>
-        )}
+              <MovieModalSkeleton />
+            </>
+          )}
+        </ErrorBoundary>
       </DialogContent>
     </Dialog>
   );

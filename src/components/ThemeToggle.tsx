@@ -1,4 +1,4 @@
-import { useThemeStore } from "../types/utilities.ts";
+import { useThemeStore } from "@/types/utilities.ts";
 import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -14,7 +14,6 @@ const MotionSun = motion.create(Sun);
 export function ThemeToggle() {
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
-  const isThemeToggling = useThemeStore((state) => state.isThemeToggling);
 
   const nextTheme = theme === "light" ? "dark" : "light";
 
@@ -26,7 +25,7 @@ export function ThemeToggle() {
             onClick={toggleTheme}
             variant="thirdary"
             aria-label={`Toggle to ${nextTheme} theme`}
-            className={`aspect-square ${isThemeToggling ? "duration-0" : ""} relative overflow-hidden hover:cursor-pointer rounded-2xl size-12`}
+            className="aspect-square relative overflow-hidden hover:cursor-pointer rounded-2xl size-12"
           >
             <AnimatePresence mode="sync" initial={false}>
               {theme === "light" ? (

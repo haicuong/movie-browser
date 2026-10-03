@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ErrorInfo } from "react";
 import { create } from "zustand";
 import { combine, persist } from "zustand/middleware";
 
@@ -59,7 +59,7 @@ function getInitialTheme(): "light" | "dark" {
 
 export const useThemeStore = create(
   persist(
-    combine({ theme: getInitialTheme(), isThemeToggling: false }, (set) => ({
+    combine({ theme: getInitialTheme() }, (set) => ({
       toggleTheme: () => {
         set((state) => {
           const newTheme = state.theme === "light" ? "dark" : "light";
@@ -68,10 +68,14 @@ export const useThemeStore = create(
             newTheme === "dark",
           );
 
-          setTimeout(() => {
-            set({ isThemeToggling: false });
-          }, 0);
-          return { theme: newTheme, isThemeToggling: true };
+          document.documentElement.classList.add("no-transitions");
+
+          // Force a reflow to ensure the transition is applied correctly
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          window.getComputedStyle(document.documentElement).opacity;
+          document.documentElement.classList.remove("no-transitions");
+
+          return { theme: newTheme };
         });
       },
     })),
@@ -81,3 +85,7 @@ export const useThemeStore = create(
     },
   ),
 );
+
+export function logError(error: unknown, info: ErrorInfo) {
+  console.error("Render error:", error, info.componentStack);
+}

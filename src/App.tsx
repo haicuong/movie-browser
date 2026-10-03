@@ -1,8 +1,8 @@
-import Header from "./components/Header";
-import MovieCard from "./components/MovieCard";
-import { MovieCardSkeleton } from "./components/MovieCardSkeleton.tsx";
+import Header from "@/components/Header";
+import MovieCard from "@/components/MovieCard";
+import { MovieCardSkeleton } from "@/components/MovieCardSkeleton.tsx";
 import { Outlet, useSearchParams } from "react-router";
-import SearchBar from "./components/SearchBar.tsx";
+import SearchBar from "@/components/SearchBar.tsx";
 import {
   useNowPlayingMovies,
   usePopularMovies,
@@ -10,11 +10,13 @@ import {
   useTrendingMovies,
   useUpcomingMovies,
   type MovieListItem,
-} from "./types/tmdb.ts";
-import { useDebounce } from "./types/utilities.ts";
+} from "@/types/tmdb.ts";
+import { logError, useDebounce } from "@/types/utilities.ts";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { motion } from "motion/react";
+import { ErrorBoundary } from "react-error-boundary";
+import { useFavoritesStore } from "@/types/movie";
 
 export default function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -63,54 +65,54 @@ export default function App() {
       </div>
       <main className="flex flex-col h-full py-4 pb-8 overflow-x-hidden bg-background px-4 md:px-6 justify-center flex-1">
         <div className="relative flex-1 p-4">
-          {hasSearchQuery && (
-            <div className="w-full top-3 absolute">
-              <motion.h2
-                key="search-results"
-                className="text-xl font-bold"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                Search results for "{searchState}"
-              </motion.h2>
-            </div>
-          )}
           {hasSearchQuery ? (
-            <div className="flex flex-1 mt-14 justify-evenly flex-wrap gap-4 items-stretch">
-              {isSearchPending ? (
-                <>
-                  {Array.from({ length: 20 }, (_, index) => (
-                    <MovieCardSkeleton key={index} />
-                  ))}
-                </>
-              ) : isSuccess && movies ? (
-                movies.results.length === 0 ? (
-                  <div className="w-full flex flex-col justify-center items-center gap-4 text-center">
-                    <span className="font-bold text-xl">
-                      No results found for "{searchQuery}".
-                    </span>
-                    <Button
-                      onClick={onHome}
-                      variant="secondary"
-                      className="px-4 py-6 hover:cursor-pointer"
-                    >
-                      Go back to the home page
-                    </Button>
-                  </div>
-                ) : (
+            <>
+              <div className="w-full top-3 absolute">
+                <motion.h2
+                  key="search-results"
+                  className="text-xl font-bold"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Search results for "{searchState}"
+                </motion.h2>
+              </div>
+              <div className="flex flex-1 mt-14 justify-evenly flex-wrap gap-4 items-stretch">
+                {isSearchPending ? (
                   <>
-                    {movies.results.map((movie) => (
-                      <MovieCard key={movie.id} movie={movie} />
+                    {Array.from({ length: 20 }, (_, index) => (
+                      <MovieCardSkeleton key={index} />
                     ))}
                   </>
-                )
-              ) : isError ? (
-                <p className="w-full absolute text-center text-muted-foreground">
-                  Unable to load search results.
-                </p>
-              ) : null}
-            </div>
+                ) : isSuccess && movies ? (
+                  movies.results.length === 0 ? (
+                    <div className="w-full flex flex-col justify-center items-center gap-4 text-center">
+                      <span className="font-bold text-xl">
+                        No results found for "{searchQuery}".
+                      </span>
+                      <Button
+                        onClick={onHome}
+                        variant="secondary"
+                        className="px-4 py-6 hover:cursor-pointer"
+                      >
+                        Go back to the home page
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {movies.results.map((movie) => (
+                        <MovieCard key={movie.id} movie={movie} />
+                      ))}
+                    </>
+                  )
+                ) : isError ? (
+                  <p className="w-full absolute text-center text-muted-foreground">
+                    Unable to load search results.
+                  </p>
+                ) : null}
+              </div>
+            </>
           ) : (
             <HomeMovies />
           )}
@@ -144,6 +146,7 @@ function HomeMovies() {
   const popularMovies = usePopularMovies();
   const nowPlayingMovies = useNowPlayingMovies();
   const upcomingMovies = useUpcomingMovies();
+  const favoriteMovies = useFavoritesStore((state) => state.favoriteMovies);
 
   return (
     <div className="flex w-full flex-col gap-16">
@@ -171,6 +174,14 @@ function HomeMovies() {
         isPending={upcomingMovies.isPending}
         isError={upcomingMovies.isError}
       />
+      {favoriteMovies.length > 0 && (
+        <HorizontalMovies
+          title="Favorite Movies"
+          movies={favoriteMovies.toReversed()}
+          isPending={false}
+          isError={false}
+        />
+      )}
     </div>
   );
 }
@@ -190,22 +201,41 @@ function HorizontalMovies({
   return (
     <section className="flex w-full min-w-0 flex-col gap-4">
       <h2 className="text-xl font-bold">{title}</h2>
-      <div className="flex min-w-0 w-full px-2 flex-nowrap gap-4 overflow-x-auto overflow-y-hidden py-4 pt-3">
-        {isPending ? (
-          Array.from({ length: 5 }, (_, index) => (
-            <MovieCardSkeleton key={index} variant="carousel" />
-          ))
-        ) : isError ? (
-          <p className="text-muted-foreground">Unable to load movies.</p>
-        ) : movies ? (
-          movies
-            .slice(0, HOME_MOVIE_LIMIT)
-            .map((movie) => (
-              <MovieCard key={movie.id} movie={movie} variant="carousel" />
+      <div className="flex min-w-0 w-full px-2 gap-4 overflow-x-auto overflow-y-hidden py-4 pt-3">
+        <ErrorBoundary
+          onError={logError}
+          fallbackRender={({ resetErrorBoundary }) => (
+            <div className="flex flex-col items-center justify-center w-full h-full">
+              <p className="text-secondary-foreground text-lg w-full h-full flex items-center justify-center">
+                Unable to load movies.
+              </p>
+              <Button
+                className="rounded-md bg-primary mt-4 px-4 py-3 text-primary-foreground"
+                onClick={resetErrorBoundary}
+              >
+                Try again
+              </Button>
+            </div>
+          )}
+        >
+          {isPending ? (
+            Array.from({ length: 5 }, (_, index) => (
+              <MovieCardSkeleton key={index} variant="carousel" />
             ))
-        ) : (
-          <p className="text-muted-foreground">Loading...</p>
-        )}
+          ) : isError ? (
+            <p className="text-muted-foreground w-full h-full flex items-center justify-center">
+              Unable to load movies.
+            </p>
+          ) : movies ? (
+            movies
+              .slice(0, HOME_MOVIE_LIMIT)
+              .map((movie) => (
+                <MovieCard key={movie.id} movie={movie} variant="carousel" />
+              ))
+          ) : (
+            <p className="text-muted-foreground">Loading...</p>
+          )}
+        </ErrorBoundary>
       </div>
     </section>
   );

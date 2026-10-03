@@ -3,6 +3,13 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+.no-transitions,
+.no-transitions *,
+.no-transitions ::before,
+.no-transitions ::after {
+  transition: none !important;
+}
+
 @layer base {
   body {
     @apply flex relative flex-col min-h-dvh bg-secondary text-foreground;
