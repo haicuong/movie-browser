@@ -1,116 +1,117 @@
 # Movie Browser
 
-Movie Browser is a responsive movie discovery app built with React and TypeScript. It uses The Movie Database (TMDB) API to show current movie collections, search results, and detailed movie information in a focused browsing experience.
+Movie Browser is a React and TypeScript movie discovery app that uses Vite and the TMDB API to browse movie collections, search titles, and view detailed movie information.
+
+Screenshot 1
+![Screenshot 1](./public/screenshots/screenshot-1.webp)
+
+Screenshot 2
+![Screenshot 2](./public/screenshots/screenshot-2.webp)
 
 ## Features
 
-- Browse trending, popular, now-playing, and upcoming movies
-- Search TMDB movies with a debounced search field
-- Open movie details at `/movies/:id` without leaving the main page
-- View posters, ratings, release dates, genres, runtime, overview, cast, crew, and trailers when available
-- Add and remove movies from favorites
+- Browse trending, popular, now-playing, upcoming, and saved favorite movies
+- Search for movies with debounced input and URL query state
+- Open movie details in a router-backed modal
+- View ratings, release dates, genres, runtime, overview, trailer, cast, and crew when available
+- Add or remove movies from favorites
 - Persist favorites and light/dark theme preferences in browser storage
-- Responsive layouts for desktop and mobile screens
-- Loading skeletons and user-facing error and empty-result states
+- Responsive loading, empty, offline, and API error states
 
 ## Tech Stack
 
 - React 19
 - TypeScript 6
-- Vite
+- Vite 8
 - React Router
 - TanStack React Query
 - Zustand
 - Tailwind CSS 4
-- Base UI and shadcn-style UI primitives
+- Base UI, Motion, Lucide, and Geist
 - ESLint
-
-## Requirements
-
-- Node.js 18 or newer
-- npm
-- A TMDB API read access token
 
 ## Getting Started
 
-1. Install dependencies:
+### Prerequisites
 
-	```bash
-	npm install
-	```
+- Node.js `^20.19.0` or `>=22.12.0`
+- npm
+- A TMDB API read access token
 
-2. Create a `.env.local` file in the project root:
+The Node.js requirement comes from the Vite version pinned in `package-lock.json`.
 
-	```env
-	VITE_TMDB_TOKEN=your_tmdb_read_access_token
-	```
+### Installation
 
-	The token is sent as a Bearer token to the TMDB API. Do not commit `.env.local` or expose a real token in source code.
+Install dependencies and start the development server:
 
-3. Start the development server:
+```bash
+npm install
+npm run dev
+```
 
-	```bash
-	npm run dev
-	```
+Open the local URL printed by Vite.
 
-4. Open the local URL printed by Vite.
+### Environment Variables
+
+Create `.env.local` in the project root:
+
+```env
+VITE_TMDB_TOKEN=your_tmdb_read_access_token
+```
+
+The application sends this token as a Bearer token when requesting data from TMDB. `.env.local` and other local environment files are ignored by Git.
+
+Vite exposes variables prefixed with `VITE_` to client-side JavaScript. Do not use a sensitive production secret in a public client-side build, commit the token, or include it in screenshots or issue reports. A public deployment should keep the token behind a server-side proxy instead.
 
 ## Available Scripts
 
 | Command           | Description                                                    |
 | ----------------- | -------------------------------------------------------------- |
 | `npm run dev`     | Start the Vite development server with hot module replacement. |
-| `npm run build`   | Type-check the application and create a production build.      |
+| `npm run build`   | Run TypeScript project checks and create a production build.   |
 | `npm run lint`    | Run ESLint across the repository.                              |
-| `npm run preview` | Serve the production build locally for verification.           |
+| `npm run preview` | Serve the production build locally.                            |
 
-There is currently no automated test script in `package.json`; use `npm run build` and `npm run lint` as the available checks before submitting changes.
+No automated test script is currently defined in `package.json`.
 
-## Application Structure
+## Usage
+
+From the home page, browse the movie collections or use the search field to find a title. Select a movie to open its details modal, use the star control to manage favorites, and use the theme control to switch between light and dark themes. Search terms are synchronized with the `q` URL query parameter.
+
+## Routes
+
+| Route         | Description                                                                                            |
+| ------------- | ------------------------------------------------------------------------------------------------------ |
+| `/`           | Displays the movie collections or search results.                                                      |
+| `/movies/:id` | Displays the selected movie in a router-backed modal while preserving the current URL search and hash. |
+
+## Project Structure
 
 ```text
 src/
-├── api/assets/       # Bundled application assets
-├── components/       # Feature components and reusable UI
-│   └── ui/           # Base UI and shadcn-style primitives
-├── lib/              # Shared utility functions
-├── types/            # TMDB types, API hooks, stores, and custom errors
-├── App.tsx           # Main layout, search flow, and movie collections
+├── api/              # TMDB request helpers
+├── components/       # Feature components and UI primitives
+├── hooks/            # Search, movie query, theme, favorite, and countdown hooks
+├── lib/              # Shared utilities, formatters, and errors
+├── types/            # Movie data types
+├── App.tsx           # Main page layout
 ├── index.css         # Tailwind imports and theme tokens
-└── main.tsx          # Router, query client, and application providers
+└── main.tsx          # Router and application providers
 public/
-├── credits/          # TMDB attribution assets
+├── credits/          # In-app attribution assets
 └── logo.webp         # Application logo
 ```
 
-### Data and state
-
-- TMDB requests and response types are defined in `src/types/tmdb.ts`.
-- TanStack React Query manages request caching, loading states, retries, and errors.
-- Zustand persists favorite movie IDs under `favorites-storage`.
-- Zustand persists the selected theme under `theme-storage`.
-- Search state is synchronized with the `q` URL query parameter.
-
-### Routes
-
-| Route         | Purpose                                              |
-| ------------- | ---------------------------------------------------- |
-| `/`           | Home page with movie collections and search results. |
-| `/movies/:id` | Movie details modal rendered through the router.     |
-
 ## TMDB Attribution
 
-This product uses the TMDB API but is not endorsed or certified by TMDB. Movie metadata, images, and videos are provided by TMDB and may be subject to its terms of use.
+This product uses the TMDB API but is not endorsed or certified by TMDB. Movie metadata, images, and videos are provided by [TMDB](https://www.themoviedb.org/) and may be subject to its [Terms of Use](https://www.themoviedb.org/terms-of-use).
 
-The application also credits the icon source linked in the footer. See the running app for the current attribution link.
+The application displays the TMDB logo and attribution notice from `public/credits/TMDB.svg` in its footer. The footer also credits the [Business and finance icons created by monkik on Flaticon](https://www.flaticon.com/free-icons/business-and-finance).
 
-## Contributing
+## License
 
-Keep changes focused and consistent with the existing component boundaries. Prefer existing UI primitives and shared TMDB types over introducing parallel implementations. Preserve responsive behavior, accessible labels and focus states, and loading, empty, and error states when changing data-driven UI.
+This project is licensed under the terms described in the [LICENSE](./LICENSE.md) file.
 
-Before opening a pull request, run:
+## Support / Contact
 
-```bash
-npm run lint
-npm run build
-```
+For questions or issues, open an issue in the GitHub repository.
