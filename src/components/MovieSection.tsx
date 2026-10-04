@@ -21,7 +21,7 @@ export default function MovieSection({
   return (
     <section className="flex w-full min-w-0 flex-col gap-4">
       <h2 className="text-xl font-bold">{title}</h2>
-      <div className="flex min-w-0 w-full px-2 gap-4 overflow-x-auto overflow-y-hidden py-4 pt-3">
+      <div className="flex min-w-0 w-full px-4 gap-4 overflow-x-auto overflow-y-hidden py-4">
         <ErrorBoundary
           onError={logError}
           fallbackRender={({ resetErrorBoundary }) => (
