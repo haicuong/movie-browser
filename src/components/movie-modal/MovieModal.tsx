@@ -74,7 +74,7 @@ export default function MovieModal() {
             <>
               <DialogTitle className="sr-only">Movie error</DialogTitle>
               <title>
-                {`An error occurred while loading the movie details`} | Movie
+                An error occurred while loading the movie details | Movie
                 Browser
               </title>
               <MovieModalError

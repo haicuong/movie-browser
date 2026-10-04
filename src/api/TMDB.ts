@@ -31,7 +31,7 @@ export async function fetchTMDB(
       throw new MovieNotFoundError();
     } else if (response.status === 429) {
       throw new TooManyRequestsError();
-    } else if (response.status > 500) {
+    } else if (response.status >= 500) {
       throw new NetworkError(
         `Network error: ${response.status} ${response.statusText}`,
       );
