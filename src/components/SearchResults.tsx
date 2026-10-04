@@ -17,6 +17,7 @@ export default function SearchResults({
     data: movies,
     isSuccess,
     isPending,
+    isPaused,
     isError,
   } = useSearchMovies(searchQuery);
 
@@ -51,7 +52,13 @@ export default function SearchResults({
         </motion.h2>
       </div>
       <div className="flex flex-1 mt-14 justify-evenly flex-wrap gap-4 items-stretch">
-        {isSearchPending ? (
+        {isPaused && isPending ? (
+          <div className="w-full flex items-center justify-center h-120 text-center">
+            <span className="text-base">
+              You are currently offline. Auto reload when reconnect.
+            </span>
+          </div>
+        ) : isSearchPending ? (
           <>
             {Array.from({ length: 20 }, (_, index) => (
               <MovieCardSkeleton key={index} />
@@ -59,7 +66,7 @@ export default function SearchResults({
           </>
         ) : isSuccess && movies ? (
           movies.results.length === 0 ? (
-            <div className="w-full flex flex-col justify-center items-center gap-4 text-center">
+            <div className="w-full h-120 flex flex-col justify-center items-center gap-4 text-center">
               <span className="font-bold text-xl">
                 No results found for "{searchQuery}".
               </span>
