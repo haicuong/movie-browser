@@ -19,6 +19,7 @@ export default defineConfig(({ mode }) => {
           target: "https://api.themoviedb.org",
           changeOrigin: true,
           headers: { Authorization: `Bearer ${env.TMDB_TOKEN}` },
+          timeout: 5000,
           rewrite: (path) => {
             const url = new URL(path, "http://localhost");
             const tmdbPath = url.searchParams.get("path") ?? "";

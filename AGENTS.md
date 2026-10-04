@@ -1,50 +1,36 @@
-# AGENTS.md
+# Agent Instructions
 
-## Project overview
+## Operating rules
 
-This repo is a Vite + React 19 + TypeScript movie browser app styled with Tailwind CSS. The app fetches and displays movie data primarily via TMDB-backed helpers and renders responsive movie cards, search results, and a modal detail view.
+- Treat the repository as a Vite + React 19 + TypeScript app. Make the smallest change that fixes the requested behavior.
+- Read the owning component, hook, API helper, or type before editing. Follow existing patterns; do not introduce a parallel abstraction or data model.
+- Do not modify generated output, dependency files, or unrelated user changes. Do not commit or create branches.
+- Preserve existing search, favorites, modal, theme, loading, and error behavior unless the task explicitly changes it.
 
-For a higher-level overview of the app and current scope, see [README.md](README.md).
+## Repository map
 
-## Commands
+- App composition: `src/App.tsx`
+- UI components and primitives: `src/api/components/` and `src/api/components/ui/`
+- TMDB client: `src/api/TMDB.ts`
+- Server proxy: `api/tmdb-proxy.ts`
+- Movie hooks: `src/hooks/movie/`
+- Shared movie types: `src/types/movie.ts`
+- Shared utilities and error classes: `src/lib/`
 
-Use the project scripts from the repo root:
+## Architecture constraints
 
-- `npm install` — install dependencies
-- `npm run dev` — start the local Vite dev server
-- `npm run build` — run TypeScript checks and create a production build
-- `npm run lint` — run ESLint across the app
-- `npm run preview` — preview the production build
+- Keep the request path `browser -> src/api/TMDB.ts -> api/tmdb-proxy.ts -> TMDB` intact. Never expose the TMDB token to browser code.
+- Use TanStack Query for server data and the existing Zustand stores for client state.
+- Keep movie objects aligned with the existing TMDB types. Do not create duplicate movie interfaces for one feature.
+- Search and navigation state is URL-backed. Reuse `useSearchQuery`; do not add competing `setSearchParams` calls that create duplicate history entries.
+- Favorites intentionally store compact movie snapshots in localStorage. Preserve this contract unless the task explicitly changes persistence.
+- Preserve custom error behavior for not-found, rate-limit, and network failures, including existing retry behavior.
+- Use Tailwind utilities and existing UI primitives. Keep components focused, responsive, keyboard-accessible, and tolerant of missing image or metadata fields.
+- Respect the existing reduced-motion behavior; do not add an app-level motion toggle.
 
-Before finishing a change, prefer running the smallest relevant validation command, usually `npm run build` or `npm run lint` depending on the modification.
+## Validation
 
-## Architecture and conventions
-
-- Source files live in `src/`.
-- App composition and page-level logic live in [src/App.tsx](src/App.tsx).
-- Reusable UI lives in [src/components](src/components), with shadcn-style primitives under [src/components/ui](src/components/ui).
-- Shared types and TMDB helpers live in [src/types](src/types).
-- Large data-fetching and movie object definitions should stay aligned with the existing TMDB model rather than introducing a second parallel type layer.
-
-## Component patterns
-
-- Prefer explicit prop types for React components.
-- Keep UI components small and focused.
-- Reuse the existing UI primitives, especially `Button` from [src/components/ui/button.tsx](src/components/ui/button.tsx), instead of introducing ad hoc styling patterns.
-- Use `Link` from `react-router` for internal navigation and keep URL state synced with `useSearchParams` when the feature involves search/filter state.
-- Preserve responsive behavior and graceful empty/error states.
-- Use accessible fallbacks for missing images or unavailable metadata.
-
-## Styling and implementation guidance
-
-- Tailwind utility classes are the default styling mechanism.
-- Match the project’s existing design language: cards with rounded surfaces, muted backgrounds, and subtle hover shadows.
-- Keep accessibility in mind for image alt text, focus rings, and navigation anchors.
-- Prefer simple data guards like `movie?.field` checks and fallback text over fragile assumptions.
-
-## Acceptance checklist for changes
-
-- Follow the existing folder structure and naming patterns.
-- Keep the change scoped to the relevant feature or bug.
-- Preserve working search, favorites, and modal behavior unless the task explicitly modifies that flow.
-- Validate with the relevant project command before finishing.
+- Install dependencies with `npm install` when dependencies are missing.
+- Run `npm run lint` for lint or component changes.
+- Run `npm run build` for TypeScript, API, routing, or production-build changes; it runs `tsc -b` and `vite build`.
+- No automated test suite exists. Report that limitation when relevant and include the validation command run.

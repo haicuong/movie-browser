@@ -4,7 +4,6 @@ Movie Browser is a React and TypeScript movie discovery app that uses Vite and t
 
 **🌐 Live Website:** [movie-browser.haicuong.me](https://movie-browser.haicuong.me/)
 
-
 ![Screenshot 1](./public/screenshots/screenshot-1.webp)
 The start of the Homepage, showing week trending movies
 
