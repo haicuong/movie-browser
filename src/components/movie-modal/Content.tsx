@@ -55,7 +55,9 @@ export default function MovieModalContent({ movie }: { movie: MovieDetails }) {
         {movie.release_date && (
           <div>
             <dt className="sr-only">Release date</dt>
-            <dd>Released: {movie.release_date}</dd>
+            <dd>
+              Released: {new Date(movie.release_date).toLocaleDateString()}
+            </dd>
           </div>
         )}
         {runtime && (
