@@ -30,7 +30,7 @@ Screenshot 2
 - Base UI, Motion, Lucide, and Geist
 - ESLint
 
-## Getting Started
+## Development Setup
 
 ### Prerequisites
 
@@ -40,28 +40,35 @@ Screenshot 2
 
 The Node.js requirement comes from the Vite version pinned in `package-lock.json`.
 
-### Installation
+### 1. Install dependencies
 
-Install dependencies and start the development server:
+From the repository root, install the project dependencies:
 
 ```bash
 npm install
+```
+
+### 2. Configure TMDB access
+
+Create a file named `.env.local` in the project root. Add your TMDB API read access token using the exact variable name below:
+
+```env
+TMDB_TOKEN=your_tmdb_read_access_token
+```
+
+The local Vite proxy and the Vercel API route both read `TMDB_TOKEN` and send it to TMDB as a Bearer token. `.env.local` is ignored by Git, so do not commit it or share its contents.
+
+### 3. Start the development server
+
+```bash
 npm run dev
 ```
 
-Open the local URL printed by Vite.
+Open the local URL printed by Vite. If you change `TMDB_TOKEN`, stop and restart the dev server so Vite reloads the environment file.
 
-### Environment Variables
+### Deployment environment
 
-Create `.env.local` in the project root:
-
-```env
-VITE_TMDB_TOKEN=your_tmdb_read_access_token
-```
-
-The application sends this token as a Bearer token when requesting data from TMDB. `.env.local` and other local environment files are ignored by Git.
-
-Vite exposes variables prefixed with `VITE_` to client-side JavaScript. Do not use a sensitive production secret in a public client-side build, commit the token, or include it in screenshots or issue reports. A public deployment should keep the token behind a server-side proxy instead.
+For a Vercel deployment, add `TMDB_TOKEN` as an Environment Variable in the Vercel project settings. Do not use the `VITE_` prefix: the token is consumed by the server-side proxy and must not be bundled into client-side JavaScript.
 
 ## Available Scripts
 
@@ -88,6 +95,8 @@ From the home page, browse the movie collections or use the search field to find
 ## Project Structure
 
 ```text
+api/
+└── tmdb-proxy.ts       # Vercel production proxy for TMDB requests
 src/
 ├── api/              # TMDB request helpers
 ├── components/       # Feature components and UI primitives
@@ -99,7 +108,8 @@ src/
 └── main.tsx          # Router and application providers
 public/
 ├── credits/          # In-app attribution assets
-└── logo.webp         # Application logo
+└── screenshots/       # README screenshots
+vite.config.ts        # Vite config and local TMDB proxy
 ```
 
 ## TMDB Attribution
