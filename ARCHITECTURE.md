@@ -28,9 +28,9 @@ Requests are managed with TanStack Query.
 
 ### 2. URL history management
 
-- **Bug:** while testing the back/forward buttons, I found that `setSearchParams` was called three times per navigation. This pushed three identical history entries and blocked direct URL edits, so the back button never worked, and it led to other bugs.
+- **Bug:** while testing the back/forward buttons, I found that `setSearchParams` was called multiple times per navigation. This pushed multiple identical history entries and blocked direct URL edits, so the back button never worked, and it led to other bugs.
 - **Fix:** the custom hook `useSearchQuery` handles two branches separately: queries from user input, and changes coming from the URL (direct edits, including back/forward navigation).
-- Details are in a blog post (coming soon).
+- Details are in a [blog post](https://haicuong.me/blog/posts/debounced-search-back-button/).
 
 ### 3. Favorites stored as snapshots
 

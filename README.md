@@ -2,6 +2,8 @@
 
 Movie Browser is a React and TypeScript movie discovery app that uses Vite and the TMDB API to browse movie collections, search titles, and view detailed movie information.
 
+For an overview of the application architecture and its key design decisions, see the [Architecture Guide](./ARCHITECTURE.md).
+
 **🌐 Live Website:** [movie-browser.haicuong.me](https://movie-browser.haicuong.me/)
 
 ![Screenshot 1](./public/screenshots/screenshot-1.webp)
