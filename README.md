@@ -4,11 +4,14 @@ Movie Browser is a React and TypeScript movie discovery app that uses Vite and t
 
 **🌐 Live Website:** [movie-browser.haicuong.me](https://movie-browser.haicuong.me/)
 
-Screenshot 1
-![Screenshot 1](./public/screenshots/screenshot-1.webp)
 
-Screenshot 2
+![Screenshot 1](./public/screenshots/screenshot-1.webp)
+The start of the Homepage, showing week trending movies
+
+
 ![Screenshot 2](./public/screenshots/screenshot-2.webp)
+Search results of query "spider"
+
 
 ## Features
 
@@ -51,6 +54,8 @@ npm install
 ```
 
 ### 2. Configure TMDB access
+
+Create an account or sign in at [TMDB](https://www.themoviedb.org/), then create an application in your account settings and copy its API Read Access Token from the [TMDB authentication documentation](https://developer.themoviedb.org/docs/authentication-application).
 
 Create a file named `.env.local` in the project root. Add your TMDB API read access token using the exact variable name below:
 

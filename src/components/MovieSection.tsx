@@ -9,11 +9,13 @@ export default function MovieSection({
   title,
   movies,
   isPending,
+  isPaused,
   isError,
 }: {
   title: string;
   movies: MovieListItem[] | undefined;
   isPending: boolean;
+  isPaused: boolean;
   isError: boolean;
 }) {
   return (
@@ -37,9 +39,15 @@ export default function MovieSection({
           )}
         >
           {isPending ? (
-            Array.from({ length: 5 }, (_, index) => (
-              <MovieCardSkeleton key={index} variant="carousel" />
-            ))
+            isPaused ? (
+              <p className="text-muted-foreground w-full h-full flex items-center justify-center">
+                You are offline. Auto reload when reconnect.
+              </p>
+            ) : (
+              Array.from({ length: 5 }, (_, index) => (
+                <MovieCardSkeleton key={index} variant="carousel" />
+              ))
+            )
           ) : isError ? (
             <p className="text-muted-foreground w-full h-full flex items-center justify-center">
               Unable to load movies.
