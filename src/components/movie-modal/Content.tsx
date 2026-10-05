@@ -21,7 +21,7 @@ export default function MovieModalContent({ movie }: { movie: MovieDetails }) {
     : null;
 
   return (
-    <article className="flex flex-col h-full overflow-y-auto gap-4 md:-mr-1 my-3">
+    <article className="flex flex-col h-full overflow-y-auto gap-4 sm:-mr-1 my-3">
       <div className="flex flex-col gap-4 sm:flex-row">
         {movie.poster_path ? (
           <img
@@ -30,7 +30,7 @@ export default function MovieModalContent({ movie }: { movie: MovieDetails }) {
             className="w-full object-contain sm:h-64 sm:w-fit"
           />
         ) : (
-          <div className="flex min-h-64 w-full items-center justify-center bg-thirdary text-thirdary-foreground md:w-48">
+          <div className="flex min-h-64 w-full items-center justify-center bg-thirdary text-thirdary-foreground sm:w-48">
             No poster available
           </div>
         )}
