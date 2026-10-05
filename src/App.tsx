@@ -17,7 +17,7 @@ export default function App() {
       <Header>
         <SearchBar searchQuery={searchState} onSearch={setSearchState} />
       </Header>
-      <main className="flex flex-col h-full py-4 pb-8 overflow-x-hidden bg-background px-4 md:px-6 justify-center flex-1">
+      <main className="flex flex-col h-full py-4 pb-8 overflow-x-hidden bg-background px-4 sm:px-6 justify-center flex-1">
         <div className="relative flex-1 p-4">
           {hasSearchQuery ? (
             <SearchResults

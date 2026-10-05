@@ -22,8 +22,8 @@ export default function MovieCardSkeleton({
           <Skeleton className="h-4 w-5/6 rounded" />
         </div>
       </div>
-      <div className="absolute flex aspect-square items-center justify-center -top-2 right-4 md:w-10 md:h-10 w-12 h-12 rounded-lg bg-card p-1 shadow-shadow shadow-md">
-        <Star className="size-8 md:size-6 fill-thirdary text-thirdary animate-pulse" />
+      <div className="absolute flex aspect-square items-center justify-center -top-2 right-4 sm:w-10 sm:h-10 w-12 h-12 rounded-lg bg-card p-1 shadow-shadow shadow-md">
+        <Star className="size-8 sm:size-6 fill-thirdary text-thirdary animate-pulse" />
       </div>
     </article>
   );

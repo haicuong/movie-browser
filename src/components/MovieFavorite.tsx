@@ -28,13 +28,13 @@ export function MovieFavorite({ movie }: { movie: MovieListItem }) {
             aria-label={
               isFavorite ? "Remove from favorites" : "Add to favorites"
             }
-            className="hover:cursor-pointer size-10 md:size-8 flex h-fit items-center justify-center transition-none dark:hover:bg-transparent hover:bg-transparent p-1 aspect-square"
+            className="hover:cursor-pointer size-10 sm:size-8 flex h-fit items-center justify-center transition-none dark:hover:bg-transparent hover:bg-transparent p-1 aspect-square"
           >
             <AnimatePresence mode="sync" initial={false}>
               {isFavorite ? (
                 <MotionStar
                   key="favorite"
-                  className="size-8 absolute z-2 md:size-6 fill-yellow-500 text-yellow-500"
+                  className="size-8 absolute z-2 sm:size-6 fill-yellow-500 text-yellow-500"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
@@ -43,7 +43,7 @@ export function MovieFavorite({ movie }: { movie: MovieListItem }) {
               ) : (
                 <MotionStar
                   key="not-favorite"
-                  className="size-8 absolute md:size-6"
+                  className="size-8 absolute sm:size-6"
                   initial={{ scale: 1, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 1, opacity: 0 }}

@@ -14,13 +14,13 @@ export default function MovieModalSkeleton() {
             <Skeleton className="h-6 w-56 rounded" />
             <Skeleton className="h-4 w-40 rounded" />
           </div>
-          <Star className="size-8 md:size-6 fill-thirdary text-thirdary animate-pulse" />
+          <Star className="size-8 sm:size-6 fill-thirdary text-thirdary animate-pulse" />
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 md:flex-row">
-        <Skeleton className="aspect-2/3 w-full rounded-none md:h-64 md:w-43" />
-        <Skeleton className="aspect-video rounded-none w-full md:w-96" />
+      <div className="flex flex-col gap-4 sm:flex-row">
+        <Skeleton className="aspect-2/3 w-full rounded-none sm:h-64 sm:w-43" />
+        <Skeleton className="aspect-video rounded-none w-full sm:w-96" />
       </div>
 
       <div className="flex flex-wrap gap-5">

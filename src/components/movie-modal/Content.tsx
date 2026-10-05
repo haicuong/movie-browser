@@ -22,12 +22,12 @@ export default function MovieModalContent({ movie }: { movie: MovieDetails }) {
 
   return (
     <article className="flex flex-col h-full overflow-y-auto gap-4 md:-mr-1 my-3">
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="flex flex-col gap-4 sm:flex-row">
         {movie.poster_path ? (
           <img
             src={`${posterBaseUrlStandard}${movie.poster_path}`}
             alt={movie.title}
-            className="w-full object-contain md:h-64 md:w-fit"
+            className="w-full object-contain sm:h-64 sm:w-fit"
           />
         ) : (
           <div className="flex min-h-64 w-full items-center justify-center bg-thirdary text-thirdary-foreground md:w-48">
@@ -35,7 +35,7 @@ export default function MovieModalContent({ movie }: { movie: MovieDetails }) {
           </div>
         )}
         {trailer && (
-          <div className="relative aspect-video w-full overflow-hidden bg-black md:w-96">
+          <div className="relative aspect-video w-full overflow-hidden bg-black sm:w-96">
             <iframe
               src={`https://www.youtube-nocookie.com/embed/${trailer.key}?rel=0&playsinline=1`}
               title={`${movie.title} trailer`}

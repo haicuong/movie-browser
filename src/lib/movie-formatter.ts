@@ -3,5 +3,5 @@ export const movieCardClassName =
 export const layoutClass = (variant: "grid" | "carousel" = "carousel") => {
   return variant === "carousel"
     ? "w-[78vw] max-w-72 shrink-0"
-    : "w-full min-w-64 md:max-w-[25vw]";
+    : "w-full min-w-64 sm:max-w-[25vw]";
 };
