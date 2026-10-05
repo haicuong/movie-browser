@@ -21,7 +21,7 @@ export default function MovieModalContent({ movie }: { movie: MovieDetails }) {
     : null;
 
   return (
-    <article className="flex flex-col h-full overflow-y-auto gap-4 md:-mr-1">
+    <article className="flex flex-col h-full overflow-y-auto gap-4 md:-mr-1 my-3">
       <div className="flex flex-col gap-4 md:flex-row">
         {movie.poster_path ? (
           <img

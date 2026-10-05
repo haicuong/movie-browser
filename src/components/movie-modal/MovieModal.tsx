@@ -94,7 +94,7 @@ export default function MovieModal() {
               <DialogHeader>
                 <DialogTitle className="sr-only">Movie details</DialogTitle>
                 <DialogTitle className="flex items-center gap-2 h-fit max-w-[90%]">
-                  <div className="flex flex-col gap-2 w-fit">
+                  <div className="flex flex-col w-fit">
                     <div className="text-lg max-w-full">
                       <span className="whitespace-normal wrap-break-word font-bold">
                         {movie.title}

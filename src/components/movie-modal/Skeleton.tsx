@@ -19,14 +19,15 @@ export default function MovieModalSkeleton() {
       </div>
 
       <div className="flex flex-col gap-4 md:flex-row">
-        <Skeleton className="aspect-2/3 w-full rounded md:h-64 md:w-48" />
-        <Skeleton className="aspect-video w-full rounded md:w-96" />
+        <Skeleton className="aspect-2/3 w-full rounded-none md:h-64 md:w-43" />
+        <Skeleton className="aspect-video rounded-none w-full md:w-96" />
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        <Skeleton className="h-4 w-24 rounded" />
-        <Skeleton className="h-4 w-32 rounded" />
-        <Skeleton className="h-4 w-20 rounded" />
+      <div className="flex flex-wrap gap-5">
+        <Skeleton className="h-4 w-21 rounded" />
+        <Skeleton className="h-4 w-33 rounded" />
+        <Skeleton className="h-4 w-25 rounded" />
+        <Skeleton className="h-4 w-50 rounded" />
       </div>
 
       <Skeleton className="h-6 w-3/4 rounded" />
