@@ -16,6 +16,7 @@ import { MotionConfig } from "motion/react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Button } from "@/components/ui/button";
 import { logError } from "@/lib/utils";
+import RouteNotFound from "@/components/RouteNotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "*", element: <App notFound /> },
 ]);
 
 createRoot(document.getElementById("root")!).render(
