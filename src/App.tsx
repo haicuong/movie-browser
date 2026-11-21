@@ -6,6 +6,7 @@ import useSearchQuery from "@/hooks/useSearchQuery";
 import SearchResults from "@/components/SearchResults";
 import HomeMovies from "@/components/HomeMovies";
 import RouteNotFound from "./components/RouteNotFound";
+import AuthModal from "@/components/AuthModal";
 
 export default function App({ notFound }: { notFound?: boolean }) {
   const { searchState, setSearchState, searchQuery, urlQuery } =
@@ -35,6 +36,7 @@ export default function App({ notFound }: { notFound?: boolean }) {
         <Outlet />
       </main>
       <Footer />
+      <AuthModal />
     </>
   );
 }

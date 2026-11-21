@@ -98,17 +98,22 @@ export function useToggleFavoriteMutation() {
           return;
         }
 
-        // Session expired or revoked
+        // Unauthenticated request or session expired/revoked
         if (error.status === 401) {
+          const wasAuthenticated = Boolean(
+            queryClient.getQueryData(currentUserOptions.queryKey),
+          );
           queryClient.setQueryData(currentUserOptions.queryKey, null);
           queryClient.removeQueries({
             queryKey: favoritesQueryOptions.queryKey,
           });
-          showToast({
-            title: "Session expired",
-            description: "Please log in again to manage your favorites.",
-            type: "error",
-          });
+          if (wasAuthenticated) {
+            showToast({
+              title: "Session expired",
+              description: "Please log in again to manage your favorites.",
+              type: "error",
+            });
+          }
           openAuthModal(!isCurrentlyFavorite ? movie : null);
           return;
         }

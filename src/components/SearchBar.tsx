@@ -38,7 +38,7 @@ export default function SearchBar({
                 <Button
                   onClick={() => onSearch("")}
                   variant="ghost"
-                  className="h-fit px-1 hover:cursor-pointer"
+                  className="h-fit px-1 hover:cursor-pointer aspect-square"
                 >
                   <XIcon className="size-4" />
                 </Button>
