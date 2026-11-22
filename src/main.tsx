@@ -12,6 +12,7 @@ import {
   TooManyRequestsError,
 } from "@/lib/errors";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toast";
 import { MotionConfig } from "motion/react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Button } from "@/components/ui/button";
@@ -77,6 +78,7 @@ createRoot(document.getElementById("root")!).render(
           <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
           </QueryClientProvider>
+          <Toaster />
         </TooltipProvider>
       </MotionConfig>
     </ErrorBoundary>

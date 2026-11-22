@@ -1,8 +1,12 @@
+import { useEffect, useRef } from "react";
+import { useMatch } from "react-router";
 import useNowPlayingMovies from "@/hooks/movie/useNowPlayingMovies";
 import usePopularMovies from "@/hooks/movie/usePopularMovies";
 import useTrendingMovies from "@/hooks/movie/useTrendingMovies";
 import useUpcomingMovies from "@/hooks/movie/useUpcomingMovies";
-import useFavoritesStore from "@/hooks/useFavoritesStore";
+import { useCurrentUser } from "@/hooks/useAuth";
+import useAuthModalStore from "@/hooks/useAuthModalStore";
+import { useFavoritesQuery } from "@/hooks/useFavorites";
 import MovieSection from "@/components/MovieSection";
 
 export default function HomeMovies() {
@@ -10,7 +14,47 @@ export default function HomeMovies() {
   const popularMovies = usePopularMovies();
   const nowPlayingMovies = useNowPlayingMovies();
   const upcomingMovies = useUpcomingMovies();
-  const favoriteMovies = useFavoritesStore((state) => state.favoriteMovies);
+
+  const { data: user } = useCurrentUser();
+  const favoriteMovies = useFavoritesQuery();
+  const shouldScrollToFavorites = useAuthModalStore(
+    (state) => state.shouldScrollToFavorites,
+  );
+  const setShouldScrollToFavorites = useAuthModalStore(
+    (state) => state.setShouldScrollToFavorites,
+  );
+
+  const isMovieModalOpen = Boolean(useMatch("/movies/:id"));
+  const favoritesSectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!shouldScrollToFavorites || !user) {
+      return;
+    }
+
+    if (isMovieModalOpen) {
+      setShouldScrollToFavorites(false);
+      return;
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      favoritesSectionRef.current?.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start",
+      });
+      setShouldScrollToFavorites(false);
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [
+    shouldScrollToFavorites,
+    user,
+    isMovieModalOpen,
+    setShouldScrollToFavorites,
+  ]);
 
   return (
     <div className="flex w-full flex-col gap-16">
@@ -42,13 +86,15 @@ export default function HomeMovies() {
         isError={upcomingMovies.isError}
         isPaused={upcomingMovies.isPaused}
       />
-      {favoriteMovies.length > 0 && (
+      {user && (
         <MovieSection
+          sectionRef={favoritesSectionRef}
           title="Favorite Movies"
-          movies={favoriteMovies.toReversed()}
-          isPending={false}
-          isError={false}
-          isPaused={false}
+          movies={favoriteMovies.data}
+          isPending={favoriteMovies.isPending}
+          isError={favoriteMovies.isError}
+          isPaused={favoriteMovies.isPaused}
+          emptyMessage="No movie favorited, favorite a movie to save it here"
         />
       )}
     </div>

@@ -1,3 +1,4 @@
+import type { Ref } from "react";
 import { logError } from "@/lib/utils";
 import type { MovieListItem } from "@/types/movie";
 import { ErrorBoundary } from "react-error-boundary";
@@ -11,15 +12,22 @@ export default function MovieSection({
   isPending,
   isPaused,
   isError,
+  emptyMessage,
+  sectionRef,
 }: {
   title: string;
   movies: MovieListItem[] | undefined;
   isPending: boolean;
   isPaused: boolean;
   isError: boolean;
+  emptyMessage?: string;
+  sectionRef?: Ref<HTMLElement>;
 }) {
   return (
-    <section className="flex w-full min-w-0 flex-col gap-4">
+    <section
+      ref={sectionRef}
+      className="flex w-full min-w-0 scroll-mt-20 flex-col gap-4"
+    >
       <h2 className="text-xl font-bold">{title}</h2>
       <div className="flex min-w-0 w-full px-4 gap-4 overflow-x-auto overflow-y-hidden py-4">
         <ErrorBoundary
@@ -53,9 +61,15 @@ export default function MovieSection({
               Unable to load movies.
             </p>
           ) : movies ? (
-            movies.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} variant="carousel" />
-            ))
+            movies.length === 0 && emptyMessage ? (
+              <p className="text-muted-foreground w-full py-8 text-center">
+                {emptyMessage}
+              </p>
+            ) : (
+              movies.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} variant="carousel" />
+              ))
+            )
           ) : (
             <p className="text-muted-foreground">Loading...</p>
           )}

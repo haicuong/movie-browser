@@ -32,3 +32,14 @@ export class NetworkError extends MyError {
     }
   }
 }
+
+export class BackendApiError extends MyError {
+  status: number;
+  code: string;
+
+  constructor(status: number, code: string, message: string) {
+    super(message);
+    this.status = status;
+    this.code = code;
+  }
+}
