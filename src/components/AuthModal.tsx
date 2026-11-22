@@ -110,7 +110,10 @@ export default function AuthModal() {
       return;
     }
 
-    const parsed = loginCredentialsSchema.safeParse({ email, password });
+    const parsed =
+      mode === "login"
+        ? loginCredentialsSchema.safeParse({ email, password })
+        : registerCredentialsSchema.safeParse({ email, password });
     if (!parsed.success) {
       setErrorMessage(
         parsed.error.issues[0]?.message ??
