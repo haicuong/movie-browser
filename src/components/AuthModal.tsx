@@ -1,4 +1,5 @@
-import { useState, type SubmitEvent } from "react";
+import { useState, type SubmitEvent, type MouseEvent } from "react";
+import { useLocation } from "react-router";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +41,7 @@ export default function AuthModal() {
   const setShouldScrollToFavorites = useAuthModalStore(
     (state) => state.setShouldScrollToFavorites,
   );
+  const { pathname, search } = useLocation();
 
   const loginMutation = useLoginMutation();
   const registerMutation = useRegisterMutation();
@@ -74,7 +76,13 @@ export default function AuthModal() {
     setEmail("");
     resetFormState();
     closeAuthModal();
-    setShouldScrollToFavorites(true);
+
+    const hasSearchQuery = Boolean(
+      new URLSearchParams(search).get("q")?.trim(),
+    );
+    if (pathname === "/" && !hasSearchQuery) {
+      setShouldScrollToFavorites(true);
+    }
 
     showToast({
       title: "Signed in",
@@ -87,41 +95,17 @@ export default function AuthModal() {
     }
   }
 
-  function handleRegister() {
-    if (isSubmitting) {
-      return;
-    }
-
-    const parsed = registerCredentialsSchema.safeParse({ email, password });
-    if (!parsed.success) {
-      setErrorMessage(
-        parsed.error.issues[0]?.message ??
-          "Please check your email and password.",
-      );
-      return;
-    }
-
-    setErrorMessage(null);
-    setActiveAction("register");
-
-    registerMutation.mutate(parsed.data, {
-      onSuccess: handleAuthSuccess,
-      onError: (error) => {
-        if (error instanceof BackendApiError && error.status === 409) {
-          setErrorMessage("An account with this email already exists.");
-          return;
-        }
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Registration failed. Please try again.",
-        );
-      },
-    });
+  function handleRegister(event: SubmitEvent | MouseEvent) {
+    event.preventDefault();
+    authSubmit("register");
   }
 
-  function handleLogin(event: SubmitEvent) {
+  function handleLogin(event: SubmitEvent | MouseEvent) {
     event.preventDefault();
+    authSubmit("login");
+  }
+
+  function authSubmit(mode: "register" | "login") {
     if (isSubmitting) {
       return;
     }
@@ -136,24 +120,41 @@ export default function AuthModal() {
     }
 
     setErrorMessage(null);
-    setActiveAction("login");
+    setActiveAction(mode);
 
-    loginMutation.mutate(parsed.data, {
-      onSuccess: handleAuthSuccess,
-      onError: (error) => {
-        if (error instanceof BackendApiError && error.status === 401) {
+    if (mode === "login") {
+      loginMutation.mutate(parsed.data, {
+        onSuccess: handleAuthSuccess,
+        onError: (error) => {
+          if (error instanceof BackendApiError && error.status === 401) {
+            setErrorMessage(
+              "Invalid email or password. You may need to register an account first.",
+            );
+            return;
+          }
           setErrorMessage(
-            "Invalid email or password. You may need to register an account first.",
+            error instanceof Error
+              ? error.message
+              : "Login failed. Please try again.",
           );
-          return;
-        }
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Login failed. Please try again.",
-        );
-      },
-    });
+        },
+      });
+    } else {
+      registerMutation.mutate(parsed.data, {
+        onSuccess: handleAuthSuccess,
+        onError: (error) => {
+          if (error instanceof BackendApiError && error.status === 409) {
+            setErrorMessage("An account with this email already exists.");
+            return;
+          }
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : "Registration failed. Please try again.",
+          );
+        },
+      });
+    }
   }
 
   return (
@@ -171,7 +172,7 @@ export default function AuthModal() {
         </DialogHeader>
 
         <form
-          onSubmit={handleLogin}
+          onSubmit={handleRegister}
           className="flex flex-col gap-3 min-h-0 overflow-y-auto overflow-x-hidden p-1"
           noValidate
         >
@@ -253,11 +254,10 @@ export default function AuthModal() {
 
           <div className="flex flex-col gap-2">
             <Button
-              type="button"
+              type="submit"
               variant="default"
               className="w-full hover:cursor-pointer"
               disabled={isSubmitting}
-              onClick={handleRegister}
             >
               {activeAction === "register" && isSubmitting ? (
                 <>
@@ -269,10 +269,11 @@ export default function AuthModal() {
               )}
             </Button>
             <Button
-              type="submit"
+              type="button"
               variant="outline"
               className="w-full hover:cursor-pointer"
               disabled={isSubmitting}
+              onClick={handleLogin}
             >
               {activeAction === "login" && isSubmitting ? (
                 <>
