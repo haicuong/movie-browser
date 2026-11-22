@@ -29,45 +29,45 @@ export default function Header({ children }: { children: React.ReactNode }) {
         <ThemeToggle />
         {children}
         <div className="flex items-center justify-center w-16">
-          {!isAuthPending &&
-            (user ? (
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      variant="thirdary"
-                      size="sm"
-                      className="shrink-0 hover:cursor-pointer"
-                      disabled={isLoggingOut}
-                      onClick={() => logout()}
-                    >
-                      Log out
-                    </Button>
-                  }
-                />
-                <TooltipContent>
-                  <p>Signed in as {user.email}</p>
-                </TooltipContent>
-              </Tooltip>
-            ) : (
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <Button
-                      variant="default"
-                      size="sm"
-                      className="shrink-0 hover:cursor-pointer"
-                      onClick={() => openAuthModal()}
-                    >
-                      Log in
-                    </Button>
-                  }
-                />
-                <TooltipContent>
-                  <p>Log in to favorite movies</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
+          {user ? (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="thirdary"
+                    size="sm"
+                    className="shrink-0 hover:cursor-pointer"
+                    disabled={isLoggingOut}
+                    onClick={() => logout()}
+                  >
+                    Log out
+                  </Button>
+                }
+              />
+              <TooltipContent>
+                <p>Signed in as {user.email}</p>
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="shrink-0 hover:cursor-pointer"
+                    disabled={isAuthPending}
+                    onClick={() => openAuthModal()}
+                  >
+                    Log in
+                  </Button>
+                }
+              />
+              <TooltipContent>
+                <p>Log in to favorite movies</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
       </div>
     </header>
